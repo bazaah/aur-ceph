@@ -223,6 +223,7 @@ build() {
     -DWITH_FMT_VERSION="9.0.0" \
     -DENABLE_SHARED=ON \
     -DWITH_TESTS=ON \
+    -DWITH_RBD_RWL=ON \
     -Wno-dev
 
   VERBOSE=1 make -C build legacy-option-headers
