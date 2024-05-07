@@ -5,7 +5,7 @@
 pkgbase='ceph'
 pkgdesc='Distributed, fault-tolerant storage platform delivering object, block, and file system'
 pkgver=18.2.2
-pkgrel=2
+pkgrel=3
 url='https://ceph.com/'
 arch=('x86_64')
 license=('GPL')
