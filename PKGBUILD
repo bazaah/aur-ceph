@@ -34,10 +34,10 @@ makedepends=(
   'pkgconf'         'python'           'snappy'          'sqlite'          'systemd-libs'
   'thrift'          'util-linux'       'xfsprogs'        'zlib'            'zstd'
 
-  'python-bcrypt'   'python-cherrypy'      'python-coverage'   'python-dateutil'            'python-jinja'
-  'python-pecan'    'python-prettytable'   'python-pyjwt'      'python-pyopenssl'           'python-requests'
-  'python-scipy'    'python-setuptools'    'python-sphinx'     'python-typing_extensions'   'python-werkzeug'
-  'python-yaml'
+  'python-bcrypt'     'python-cherrypy'  'python-coverage'     'python-dateutil'  'python-jinja'
+  'python-packaging'  'python-pecan'     'python-prettytable'  'python-pyjwt'     'python-pyopenssl'
+  'python-requests'   'python-scipy'     'python-setuptools'   'python-sphinx'    'python-typing_extensions'
+  'python-werkzeug'   'python-yaml'
 
   # python-bcrypt makedepends
   'python-build'   'python-installer'   'python-setuptools-rust'   'python-wheel'
@@ -812,10 +812,10 @@ package_ceph-mgr() {
 
     'sqlite'   'python'   'boost-libs'   'fmt'   'gperftools'
 
-    'python-requests'   'python-typing_extensions'   'python-coverage'      'python-jinja'      'python-pyopenssl'
-    'python-cherrypy'   'python-werkzeug'            'python-prettytable'   'python-pecan'      'python-scipy'
-    'python-yaml'       'python-setuptools'          'python-bcrypt'        'python-dateutil'
-    'python-cheroot'    'python-urllib3'             'python-jsonpatch'
+    'python-bcrypt'     'python-cheroot'    'python-cherrypy'   'python-coverage'    'python-dateutil'
+    'python-jinja'      'python-jsonpatch'  'python-packaging'  'python-pecan'       'python-prettytable'
+    'python-pyopenssl'  'python-requests'   'python-scipy'      'python-setuptools'  'python-typing_extensions'
+    'python-urllib3'    'python-werkzeug'   'python-yaml'
   )
   optdepends=(
     'cephadm: Required if cluster is managed via cephadm'
