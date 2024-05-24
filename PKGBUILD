@@ -196,6 +196,15 @@ prepare() {
   # disable/remove broken tests
   sed -i '/add_ceph_test(smoke.sh/d' src/test/CMakeLists.txt
   sed -i '/add_ceph_test(safe-to-destroy.sh/d' src/test/osd/CMakeLists.txt
+
+  # Add our bcrypt build to the tox envs
+  for filename in src/pybind/mgr/{,dashboard/}requirements.txt; do
+    grep -qiF 'ceph_bcrypt' $filename \
+    || printf -- '%s\n' \
+        "--find-links=${srcdir}/bcrypt-${__bcrypt_version}/dist" \
+        "ceph_bcrypt" \
+        >> $filename
+  done
 }
 
 build() {
