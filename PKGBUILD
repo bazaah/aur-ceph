@@ -200,6 +200,16 @@ prepare() {
         "ceph_bcrypt" \
         >> $filename
   done
+
+  # The mgr C++ daemon injects a 'ceph_module' python module into the context
+  # of all python mgr modules, but this is absent from test code.
+  #
+  # I don't understand how this worked previously, but since py3.12 the machinery
+  # the upstream to mock the ceph_module... module doesn't work, so we copy the
+  # mocks into a technically real, importable python module.
+  #
+  # Note: this must be removed from the installed files!
+  install -vD src/pybind/mgr/tests/__init__.py src/pybind/ceph_module/__init__.py
 }
 
 build() {
