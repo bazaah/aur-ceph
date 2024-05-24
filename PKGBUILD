@@ -314,10 +314,10 @@ check() {
 
   _check_ceph_python_bcrypt
 
-  export CTEST_PARALLEL_LEVEL=7
+  export CTEST_PARALLEL_LEVEL=$(nproc --ignore=4 || echo "4")
   export CTEST_OUTPUT_ON_FAILURE=1
 
-  VERBOSE=1 make -C build check || true
+  make -C build check || true
 }
 
 _package() {
