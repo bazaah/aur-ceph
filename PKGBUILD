@@ -118,9 +118,6 @@ source=(
   # Backport of https://github.com/ceph/ceph/pull/53327
   'ceph-18.2.2-backport-ceph-volume-unbound-var.patch'
 
-  # Backport of https://github.com/ceph/ceph/pull/49954
-  'ceph-18.2.2-backport-ceph-volume-check-generic-reject-reasons.patch'
-
   # Fix a few compile errors when using GCC14
   'ceph-18.2.2-gcc-14-fixes.patch'
 
@@ -167,7 +164,6 @@ sha512sums=('2fcd3d67512754947adc8780edbbee9498ef666056b804298cdc998a3eb4a2916c8
             '965f1174ed682409f5aebfe689ccc870a860f323b00dcd4c9ee079839108ee27ed4d8b42d8b59c7e3cc5fb61d554929d9f779ce224691d20b868acf7f15adb2c'
             '692b9cea0199366fdfbcaff2d9590e3a1e439b948a1a5030215e81fcc8a22ac562b3261e2057470cc8acc20f404869a5a0c4550177788dc2f824523e5267b1eb'
             '11fae8997e4df4b706245f467dc396d84f1fb48db8e569b1665a4963eb77292415a2493cae033bed23765d82269a3cd6a5bf12c1ba52e3700a63db6ad983ca5a'
-            '4e23793539043ea571aee8067e09f8caa4d5509ab2e6e2472a4f2d2fc7934f8e2d97a2993b4534e761af6b8ead90b727e4e9fbd10e28143ea7f6bb01f2eaf68e'
             '3f3a4795dfc58910972fa15a7ca8a4c3206d45351a15db66d8e93da64c7726c5f45256114b20f032d8011ab131ee20d2d8373207ad7e188a2978cf50854e10f1'
             '2c90c69b3e236622c9fb83214fe7f781c9fcb0de1b372e7837d9963780ead9c2926c347177c03fb94eb05fd838514f3afab42aa50b7c9ac800c34bf59c48b02e'
             '0ed97f2fb764ec8f7e01be45256377a6b2f451c865348b25b12ca9ef70c7120a0bf62321a9402cc4362618fde3a38ccfcd6eec738fe8cc067f17399700c273f3'
