@@ -215,6 +215,10 @@ pkgname = ceph-cephadm
 	provides = cephadm
 	conflicts = cephadm
 
+pkgname = ceph-node-proxy
+	pkgdesc = Ceph Storage daemon for cephadm deployments to collect RedFishAPI hardware metrics
+	depends = python
+
 pkgname = ceph-rados
 	pkgdesc = Ceph Storage utilities and tools for librados
 	depends = librados=18.2.2-4
@@ -286,6 +290,7 @@ pkgname = ceph-osd
 	depends = systemd-libs
 	depends = python
 	optdepends = ceph-volume: For preparing block devices for OSD daemons
+	optdepends = ceph-node-proxy: For RedFishAPI hardware metrics
 	optdepends = smartmontools: disk monitoring via S.M.A.R.T
 	optdepends = nvme-cli: disk monitoring for NVMe drives
 	backup = etc/sysctl.d/90-ceph-osd.conf

@@ -10,7 +10,7 @@ url='https://ceph.com/'
 arch=('x86_64')
 license=('GPL')
 pkgname=(
-  ceph-{common,compressor,crypto,erasure,tools,test,volume,cephadm}
+  ceph-{common,compressor,crypto,erasure,tools,test,volume,cephadm,node-proxy}
   ceph-{rados,base,mon,mgr,osd,mds,rbd,cephfs,rgw}
   lib{rados,cephfs,rbd,rgw,cephsqlite}
   python-{ceph-common,rados,rbd,cephfs,rgw}
@@ -557,6 +557,11 @@ _make_ceph_packages() {
       $bin/cephfs-top \
       $python/cephfs_top-*
 
+    _package ceph-node-proxy \
+      $bin/ceph-node-proxy \
+      $python/ceph_node_proxy \
+      $python/ceph_node_proxy-*egg-info*
+
     ###############################################
     #         Ceph misc. utils                    #
     ###############################################
@@ -827,6 +832,7 @@ package_ceph-osd() {
   )
   optdepends=(
     'ceph-volume: For preparing block devices for OSD daemons'
+    'ceph-node-proxy: For RedFishAPI hardware metrics'
     'smartmontools: disk monitoring via S.M.A.R.T'
     'nvme-cli: disk monitoring for NVMe drives'
   )
@@ -1003,6 +1009,16 @@ package_cephfs-top() {
   depends=(
     "python-ceph-common=${__version}" "python-cephfs=${__version}"
 
+    'python'
+  )
+
+  mv __pkg__/$pkgname/* "$pkgdir"
+  _print
+}
+
+package_ceph-node-proxy() {
+  pkgdesc='Ceph Storage daemon for cephadm deployments to collect RedFishAPI hardware metrics'
+  depends=(
     'python'
   )
 
