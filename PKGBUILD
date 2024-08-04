@@ -470,6 +470,7 @@ _make_ceph_packages() {
       $bin/ceph-mgr \
       $bin/ceph-exporter \
       $systemd/ceph-mgr{.target,@.service} \
+      $systemd/ceph-exporter.service \
       $share/ceph/mgr/*
 
     _package ceph-osd \
