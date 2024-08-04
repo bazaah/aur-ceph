@@ -70,10 +70,6 @@ source=(
   # git repo
   'ceph-17.2.4-tox-flake8-git-ls-files.patch'
 
-  # A problem with mypy versions <= 0.981 causes a false postive around numpy imports.
-  # See: https://github.com/python/mypy/issues/13627
-  'ceph-17.2.4-tox-mypy-false-postive.patch'
-
   # Split up a very IO heavy test suite, as otherwise test is liable to timeout
   # NOTE: this is a very large patchset and will guarrented break if/when the upstream
   # touches anything in src/test/objectstore
@@ -158,7 +154,6 @@ sha512sums=('2fcd3d67512754947adc8780edbbee9498ef666056b804298cdc998a3eb4a2916c8
             '2234d005df71b3b6013e6b76ad07a5791e3af7efec5f41c78eb1a9c92a22a67f0be9560be59b52534e90bfe251bcf32c33d5d40163f3f8f7e7420691f0f4a222'
             'b12cabda7184721c494edd22250fd05019694d2bc445722d100cdefab5385bd25c2267a029d2f6053932fa6717e38c4314385afd986969ee2744d745b53c8b58'
             '31e578b240ceaaf1216b56cdce654661eed6529ef642ecad164a02669e850100a49a85dc70f3d744671e2c5dad10aee64be7d091fa33007cb8fc6788a4336799'
-            'f1f549c5da829db787ee6ee3cf47912d5b48efb2533de05fd9735736e9218a78cf79c5958e1409a2c8adcca51460eb3ae7e73b5c1ec6cf73d4f07670c9934c3b'
             '5b43ba48dde8b7371d4b3976aa3a27ab3ad3a10e110479a101b8f222590bbd6aca318f3ac117f851596fc23daafb53aaa566e055dc9694ab16ab1170e8f77763'
             '781a01e622a70d56bf1948bdc0b427ffa95a86cec7dd9d26c6007a9ec024a942a8ca55f2acc3d37344862f1d6bf11cae998d8071754cd841a66bfba4ec9c58bf'
             '612faebfb5eec3651832f349ea3c23b50d2386889ff77592b0acff653049efdc5c2254f63c30d88b9a730813bf1f1945dda0d0beab0db7db3e0708ba8d057a40'
