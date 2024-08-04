@@ -4,8 +4,8 @@
 
 pkgbase='ceph'
 pkgdesc='Distributed, fault-tolerant storage platform delivering object, block, and file system'
-pkgver=18.2.2
-pkgrel=4
+pkgver=18.2.4
+pkgrel=1
 url='https://ceph.com/'
 arch=('x86_64')
 license=('GPL-2.0-or-later OR LGPL-2.1-or-later OR LGPL-3.0-or-later')
@@ -139,7 +139,7 @@ source=(
   # Use our fork of pyo3, reenabling subinterpreter support
   'python-bcrypt-allow-subinterpreters.patch'
 )
-sha512sums=('2fcd3d67512754947adc8780edbbee9498ef666056b804298cdc998a3eb4a2916c8eb7f2635fd19b78a8b98bd74cce30f969fa2ccb6860257880245c6df703fa'
+sha512sums=('a4ebb4e14032e6ab8e1fd8836f39234b771cb0a4b655166e9c69493a2c0d687064af4bb35523d0501629605521854e49f5c53a56279f72810d108c76f4f88c5b'
             '4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049'
             '41dbc1c395cdf9b3edf5c5d91bbc90f416b4338ad964fa3471f26a4312d3ec2a5dcebbc351a1640dc4b047b4f71aa134ac7486747e5f62980092b0176e7567f5'
             'ea069b75b786c22166c609b127b512802cc5c6e9512d792d7b7b34d276f5b86d57c8c35cfc7b5c855a59c0ba87ba1aabe2ca26da72b26bff46b6ba8410ddb27e'
