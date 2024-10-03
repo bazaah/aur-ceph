@@ -15,7 +15,6 @@ pkgname=(
   lib{rados,cephfs,rbd,rgw,cephsqlite}
   python-{ceph-common,rados,rbd,cephfs,rgw}
   cephfs-{top,shell}
-  java-cephfs
 
   ceph
   ceph-libs
@@ -23,17 +22,16 @@ pkgname=(
   ceph-cli
 )
 makedepends=(
-  'bash'           'boost'           'boost-libs'     'cmake'          'coreutils'
-  'cryptsetup'     'curl'            'cython'         'expat'          'fmt'
-  'fuse3'          'gawk'            'gcc-libs'       'git'            'glibc'
-  'gperf'          'gperftools'      'java-runtime'   'jq'             'jre11-openjdk-headless'
-  'junit'          'keyutils'        'libaio'         'libatomic_ops'  'libcap'
-  'libcap-ng'      'libcurl-compat'  'libedit'        'libgudev'       'libnl'
-  'librabbitmq-c'  'librdkafka'      'libutil-linux'  'libuv'          'libxcrypt'
-  'lua'            'lz4'             'ninja'          'nss'            'oath-toolkit'
-  'openssl'        'pkgconf'         'python'         'snappy'         'sqlite'
-  'systemd-libs'   'thrift'          'util-linux'     'xfsprogs'       'zlib'
-  'zstd'
+  'bash'            'boost'           'boost-libs'     'cmake'           'coreutils'
+  'cryptsetup'      'curl'            'cython'         'expat'           'fmt'
+  'fuse3'           'gawk'            'gcc-libs'       'git'             'glibc'
+  'gperf'           'gperftools'      'jq'             'junit'           'keyutils'
+  'libaio'          'libatomic_ops'   'libcap'         'libcap-ng'       'libcurl-compat'
+  'libedit'         'libgudev'        'libnl'          'librabbitmq-c'   'librdkafka'
+  'libutil-linux'   'libuv'           'libxcrypt'      'lua'             'lz4'
+  'ninja'           'nss'             'oath-toolkit'   'openssl'         'pkgconf'
+  'python'          'snappy'          'sqlite'         'systemd-libs'    'thrift'
+  'util-linux'      'xfsprogs'        'zlib'           'zstd'
 
   'python-bcrypt'     'python-cherrypy'  'python-coverage'     'python-dateutil'  'python-jinja'
   'python-packaging'  'python-pecan'     'python-prettytable'  'python-pyjwt'     'python-pyopenssl'
@@ -296,7 +294,7 @@ build() {
     -DWITH_RBD_SSD_CACHE=ON \
     -DWITH_RBD_MIRROR=ON \
     -DWITH_CEPHFS=ON \
-    -DWITH_CEPHFS_JAVA=ON \
+    -DWITH_CEPHFS_JAVA=OFF \
     -DWITH_CEPHFS_SHELL=ON \
     -DWITH_FUSE=ON \
     -DWITH_LZ4=ON \
@@ -621,10 +619,6 @@ _make_ceph_packages() {
       $bin/ceph_omapbench \
       $bin/ceph-syn \
       $man/man8/ceph-syn.8
-
-    _package java-cephfs \
-      $lib/libcephfs_jni.so{,.1,.1.0.0} \
-      $share/java/libcephfs.jar
 
     ###############################################
     #         Ceph python packages                #
@@ -1096,18 +1090,6 @@ package_ceph-test() {
 
     'libcap'   'libaio'   'boost-libs'   'fmt'   'gperftools'
     'snappy'
-  )
-
-  mv __pkg__/$pkgname/* "$pkgdir"
-  _print
-}
-
-package_java-cephfs() {
-  pkgdesc='Ceph Storage JNI bindings for CephFS'
-  depends=(
-    "libcephfs=${__version}"
-
-    'java-runtime'
   )
 
   mv __pkg__/$pkgname/* "$pkgdir"
