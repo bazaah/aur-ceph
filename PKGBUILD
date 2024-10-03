@@ -221,14 +221,6 @@ prepare() {
     -e 's|Boost_|boost_|g' \
     -e 's|[Bb]oost_boost|boost_system|g' -i || exit 1
 
-  # fmt 11 moved the FMT_VERSION #define to fmt/base.h
-  # there's little point in creating a patch for this,
-  # as ceph 19 no longer uses Findfmt.cmake at all
-  sed \
-    -i \
-    -e 's|set(_fmt_version_file "${fmt_INCLUDE_DIR}/fmt/core.h")|set(_fmt_version_file "${fmt_INCLUDE_DIR}/fmt/base.h")|' \
-    cmake/modules/Findfmt.cmake
-
   # remove tests that require root privileges
   rm src/test/cli/ceph-authtool/cap*.t
   sed -i '/add_ceph_test(mgr-dashboard-smoke.sh/d' src/test/mgr/CMakeLists.txt
