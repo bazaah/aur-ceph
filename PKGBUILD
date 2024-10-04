@@ -282,7 +282,8 @@ build() {
     -DWITH_OCF=OFF \
     -DWITH_DPDK=OFF \
     -DWITH_SPDK=OFF \
-    -DWITH_QAT=OFF \
+    -DWITH_QATDRV=OFF \
+    -DWITH_QATLIB=OFF \
     -DWITH_QATZIP=OFF \
     -DWITH_RBD=ON \
     -DWITH_RBD_RWL=ON \
