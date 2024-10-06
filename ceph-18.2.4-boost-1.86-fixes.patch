@@ -64,3 +64,15 @@ index b006500153c..0edea1d4ac1 100644
  using namespace std;
  
  typedef boost::mt11213b gen_type;
+diff --git a/src/test/objectstore/Fragmentation_simulator.cc b/src/test/objectstore/Fragmentation_simulator.cc
+index 02a2991cd0c..c6b856b51f8 100644
+--- a/src/test/objectstore/Fragmentation_simulator.cc
++++ b/src/test/objectstore/Fragmentation_simulator.cc
+@@ -19,6 +19,7 @@
+ #include "test/objectstore/ObjectStoreImitator.h"
+ #include <fstream>
+ #include <boost/random/uniform_int.hpp>
++#include <boost/random/mersenne_twister.hpp>
+ #include <fmt/core.h>
+ #include <mutex>
+ #include <string>
