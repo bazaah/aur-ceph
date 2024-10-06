@@ -526,7 +526,8 @@ _make_ceph_packages() {
       $man/man8/radosgw{,-admin}.8 \
       $man/man8/rgw-orphan-list.8 \
       $man/man8/ceph-diff-sorted.8 \
-      $man/man8/rgw-policy-check.8
+      $man/man8/rgw-policy-check.8 \
+      $man/man8/rgw-restore-bucket-index.8
 
     ###############################################
     #         Ceph clients / applications         #
@@ -534,7 +535,7 @@ _make_ceph_packages() {
 
     _package librbd \
       $inc/rbd/* \
-      $lib/librbd.so{,.1,.1.18.0} \
+      $lib/librbd.so{,.1,.1.19.0} \
       $lib/ceph/librbd/*
 
     _package ceph-rbd \
