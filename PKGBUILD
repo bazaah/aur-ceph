@@ -48,7 +48,7 @@ checkdepends=(
 
   'python-nose'   'python-pycodestyle'   'python-pylint'   'python-pytest'   'python-pytest-cov'
 )
-__bcrypt_version='4.1.3'
+__bcrypt_version='4.2.1'
 
 # Despite the upstream suggesting that LTO is now possible, I still am unable
 # to set this. I get SEGVs in tests, and repeated mentions of C++ One Definition Rule
@@ -176,9 +176,9 @@ sha512sums=('a4ebb4e14032e6ab8e1fd8836f39234b771cb0a4b655166e9c69493a2c0d687064a
             '15c6a1d2bdd524a7836ad9bad12c4103a32274ad1fa5182231bcbc626e44fcfbdba04b6d55c67ef13952821da46df68e0b51ab4534c3a8830eac301e18662195'
             '73f72759a3d628575447b7607b7e27b0bab4a70b206c91daa717d461ada5fd9985c16f5782d9cb4406bd314ae9cf683cca43ab426505ab21f99141518e32533d'
             'a053c2e0abf91528fa39723784f274daeec4ca078464a7e4ebe50c1f2f2264130bf746be59d3899e114c08cf43e5e6af2b84023254a0329670e50a2bca4c51a7'
-            '59a5aafc729a6e7ac61121469bbca73809d87cafc1b16dcb0701c33fccc6298eff1071680c364042c46f91d701830a414e6ecf0bff4bee9500e4ce146dcad974'
-            '26e4569396005f7461764dbe57634ab6d20ca9bfe777b4eeae3def8e3c887333b4d64470ad1db15a8170979f85372c111abfc043bdc1deae219183cc7539980e'
-            '477e9f70c985da94c25bcac21f0f4f148623563a4c97b7249524cd82867ec2042488f37f966e75de636e6f835f9be6a8f9ea435374d714ca7d0d0cd71340b0b8')
+            '1a8af20bffa321c4e88c60b9e22ac1139de85033f11014cf1cbfcd261069bf62f7830432715561f3919c14408e408b05b0774a48d1ea954b600adc635fe7cf57'
+            '8df2c6028694600b3e1634eaff74d4e789a58463dcf2be86a60be61024e25143f3a44b4deee39a54cf9d93909f9c949f13ea8d4d83b718f37b790fee5aaeba71'
+            '14281fbaafff08d59d354ed9a0bb785e6453e45470c31afe193b5489e479cca663afade7a2fcd53b2d9f34380d90046e3729371a90f6abeae00617f52abd5a86')
 __version="${pkgver}-${pkgrel}"
 
 # -fno-plt causes linker errors (undefined reference to internal methods)
