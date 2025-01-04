@@ -23,16 +23,17 @@ pkgname=(
   ceph-cli
 )
 makedepends=(
-  'bash'            'boost'            'boost-libs'      'cmake'           'coreutils'
-  'cryptsetup'      'curl'             'cython'          'expat'           'fmt'
-  'fuse3'           'gawk'             'gcc-libs'        'git'             'glibc'
-  'gperf'           'gperftools'       'java-runtime'    'jq'              'jre11-openjdk-headless'
-  'junit'           'keyutils'         'libaio'          'libatomic_ops'   'libcap'
-  'libcap-ng'       'libcurl-compat'   'libedit'         'libgudev'        'libnl'
-  'librabbitmq-c'   'librdkafka'       'libutil-linux'   'libuv'           'libxcrypt'
-  'lua'             'lz4'              'nss'             'oath-toolkit'    'openssl'
-  'pkgconf'         'python'           'snappy'          'sqlite'          'systemd-libs'
-  'thrift'          'util-linux'       'xfsprogs'        'zlib'            'zstd'
+  'bash'           'boost'           'boost-libs'     'cmake'          'coreutils'
+  'cryptsetup'     'curl'            'cython'         'expat'          'fmt'
+  'fuse3'          'gawk'            'gcc-libs'       'git'            'glibc'
+  'gperf'          'gperftools'      'java-runtime'   'jq'             'jre11-openjdk-headless'
+  'junit'          'keyutils'        'libaio'         'libatomic_ops'  'libcap'
+  'libcap-ng'      'libcurl-compat'  'libedit'        'libgudev'       'libnl'
+  'librabbitmq-c'  'librdkafka'      'libutil-linux'  'libuv'          'libxcrypt'
+  'lua'            'lz4'             'ninja'          'nss'            'oath-toolkit'
+  'openssl'        'pkgconf'         'python'         'snappy'         'sqlite'
+  'systemd-libs'   'thrift'          'util-linux'     'xfsprogs'       'zlib'
+  'zstd'
 
   'python-bcrypt'     'python-cherrypy'  'python-coverage'     'python-dateutil'  'python-jinja'
   'python-packaging'  'python-pecan'     'python-prettytable'  'python-pyjwt'     'python-pyopenssl'
@@ -258,6 +259,7 @@ build() {
   export CMAKE_WARN_UNUSED_CLI=no
 
   cmake \
+    -G Ninja \
     -B build \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_SYSCONFDIR=/etc \
@@ -310,8 +312,8 @@ build() {
     -DWITH_TESTS=ON \
     -Wno-dev
 
-  make -C build legacy-option-headers
-  make -C build all
+  ninja -C build legacy-option-headers
+  ninja -C build all
 }
 
 check() {
@@ -322,7 +324,7 @@ check() {
   export CTEST_PARALLEL_LEVEL=$(nproc --ignore=4 || echo "4")
   export CTEST_OUTPUT_ON_FAILURE=1
 
-  make -C build check || true
+  ninja -C build check || true
 }
 
 _package() {
@@ -354,7 +356,7 @@ _make_ceph_packages() {
 
   # Main install
   local install="${pkgdir}/staging" ; mkdir "${install}"
-  make DESTDIR="${install}" -C "${srcdir}/${pkgbase}-${pkgver}/build" install
+  DESTDIR="${install}" ninja -C "${srcdir}/${pkgbase}-${pkgver}/build" install
 
   # Clear _package cache
   rm -rf "${srcdir}/__pkg__" || :
