@@ -5,7 +5,7 @@
 pkgbase='ceph'
 pkgdesc='Distributed, fault-tolerant storage platform delivering object, block, and file system'
 pkgver=18.2.4
-pkgrel=4
+pkgrel=5
 url='https://ceph.com/'
 arch=('x86_64')
 license=('GPL-2.0-or-later OR LGPL-2.1-or-later OR LGPL-3.0-or-later')
@@ -23,16 +23,17 @@ pkgname=(
   ceph-cli
 )
 makedepends=(
-  'bash'            'boost'            'boost-libs'      'cmake'           'coreutils'
-  'cryptsetup'      'curl'             'cython'          'expat'           'fmt'
-  'fuse3'           'gawk'             'gcc-libs'        'git'             'glibc'
-  'gperf'           'gperftools'       'java-runtime'    'jq'              'jre11-openjdk-headless'
-  'junit'           'keyutils'         'libaio'          'libatomic_ops'   'libcap'
-  'libcap-ng'       'libcurl-compat'   'libedit'         'libgudev'        'libnl'
-  'librabbitmq-c'   'librdkafka'       'libutil-linux'   'libuv'           'libxcrypt'
-  'lua'             'lz4'              'nss'             'oath-toolkit'    'openssl'
-  'pkgconf'         'python'           'snappy'          'sqlite'          'systemd-libs'
-  'thrift'          'util-linux'       'xfsprogs'        'zlib'            'zstd'
+  'bash'           'boost'           'boost-libs'     'cmake'          'coreutils'
+  'cryptsetup'     'curl'            'cython'         'expat'          'fmt'
+  'fuse3'          'gawk'            'gcc-libs'       'git'            'glibc'
+  'gperf'          'gperftools'      'java-runtime'   'jq'             'jre11-openjdk-headless'
+  'junit'          'keyutils'        'libaio'         'libatomic_ops'  'libcap'
+  'libcap-ng'      'libcurl-compat'  'libedit'        'libgudev'       'libnl'
+  'librabbitmq-c'  'librdkafka'      'libutil-linux'  'libuv'          'libxcrypt'
+  'lua'            'lz4'             'ninja'          'nss'            'oath-toolkit'
+  'openssl'        'pkgconf'         'python'         'snappy'         'sqlite'
+  'systemd-libs'   'thrift'          'util-linux'     'xfsprogs'       'zlib'
+  'zstd'
 
   'python-bcrypt'     'python-cherrypy'  'python-coverage'     'python-dateutil'  'python-jinja'
   'python-packaging'  'python-pecan'     'python-prettytable'  'python-pyjwt'     'python-pyopenssl'
@@ -46,8 +47,9 @@ checkdepends=(
   'inetutils'     'xmlstarlet'
 
   'python-nose'   'python-pycodestyle'   'python-pylint'   'python-pytest'   'python-pytest-cov'
+  'python-saml'   'python-xmlsec'
 )
-__bcrypt_version='4.1.3'
+__bcrypt_version='4.2.1'
 
 # Despite the upstream suggesting that LTO is now possible, I still am unable
 # to set this. I get SEGVs in tests, and repeated mentions of C++ One Definition Rule
@@ -140,6 +142,14 @@ source=(
   # various custom type fmt:formatter::format defintions are not const.
   'ceph-18.2.4-fmt-formatter-const.patch'
 
+  # Work around removed PySys_* API usage in src/mgr this is largely
+  # a rebased backport of https://github.com/ceph/ceph/pull/58199
+  'ceph-18.2.4-avoid-cpython-pysys-api.patch'
+
+  # Fix more random broken stuff from py3.13 this time; pip's build of
+  # python-xmlsec (from python-saml) is completely broken so we use sitepackages
+  'ceph-18.2.4-py313-fixes.patch'
+
   # ===== ceph-python-bcrypt sources ===== #
   "python-bcrypt-${__bcrypt_version}.tar.gz::https://github.com/pyca/bcrypt/archive/${__bcrypt_version}.tar.gz"
 
@@ -175,9 +185,11 @@ sha512sums=('a4ebb4e14032e6ab8e1fd8836f39234b771cb0a4b655166e9c69493a2c0d687064a
             '15c6a1d2bdd524a7836ad9bad12c4103a32274ad1fa5182231bcbc626e44fcfbdba04b6d55c67ef13952821da46df68e0b51ab4534c3a8830eac301e18662195'
             '73f72759a3d628575447b7607b7e27b0bab4a70b206c91daa717d461ada5fd9985c16f5782d9cb4406bd314ae9cf683cca43ab426505ab21f99141518e32533d'
             'a053c2e0abf91528fa39723784f274daeec4ca078464a7e4ebe50c1f2f2264130bf746be59d3899e114c08cf43e5e6af2b84023254a0329670e50a2bca4c51a7'
-            '59a5aafc729a6e7ac61121469bbca73809d87cafc1b16dcb0701c33fccc6298eff1071680c364042c46f91d701830a414e6ecf0bff4bee9500e4ce146dcad974'
-            '26e4569396005f7461764dbe57634ab6d20ca9bfe777b4eeae3def8e3c887333b4d64470ad1db15a8170979f85372c111abfc043bdc1deae219183cc7539980e'
-            '477e9f70c985da94c25bcac21f0f4f148623563a4c97b7249524cd82867ec2042488f37f966e75de636e6f835f9be6a8f9ea435374d714ca7d0d0cd71340b0b8')
+            '76ddf7dd71355e0b1953d215dbe5a9ce536d4866e604567bc9060f8e02bef6951be8eacd4f8896d97fe05a595aa041ab59dc65653c8fdad88e754d81f6f6b760'
+            'b8b3758a496780014821aa442c6fc2ee4797618ef4873d87ef376ad56313f871739d95366d52dec6cbb54c9ca87c4fe4b4473ff79f7800dd339fef31d6569b48'
+            '1a8af20bffa321c4e88c60b9e22ac1139de85033f11014cf1cbfcd261069bf62f7830432715561f3919c14408e408b05b0774a48d1ea954b600adc635fe7cf57'
+            '8df2c6028694600b3e1634eaff74d4e789a58463dcf2be86a60be61024e25143f3a44b4deee39a54cf9d93909f9c949f13ea8d4d83b718f37b790fee5aaeba71'
+            '14281fbaafff08d59d354ed9a0bb785e6453e45470c31afe193b5489e479cca663afade7a2fcd53b2d9f34380d90046e3729371a90f6abeae00617f52abd5a86')
 __version="${pkgver}-${pkgrel}"
 
 # -fno-plt causes linker errors (undefined reference to internal methods)
@@ -258,6 +270,7 @@ build() {
   export CMAKE_WARN_UNUSED_CLI=no
 
   cmake \
+    -G Ninja \
     -B build \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_SYSCONFDIR=/etc \
@@ -310,8 +323,8 @@ build() {
     -DWITH_TESTS=ON \
     -Wno-dev
 
-  make -C build legacy-option-headers
-  make -C build all
+  ninja -C build legacy-option-headers
+  ninja -C build all
 }
 
 check() {
@@ -322,7 +335,7 @@ check() {
   export CTEST_PARALLEL_LEVEL=$(nproc --ignore=4 || echo "4")
   export CTEST_OUTPUT_ON_FAILURE=1
 
-  make -C build check || true
+  ninja -C build check || true
 }
 
 _package() {
@@ -354,7 +367,7 @@ _make_ceph_packages() {
 
   # Main install
   local install="${pkgdir}/staging" ; mkdir "${install}"
-  make DESTDIR="${install}" -C "${srcdir}/${pkgbase}-${pkgver}/build" install
+  DESTDIR="${install}" ninja -C "${srcdir}/${pkgbase}-${pkgver}/build" install
 
   # Clear _package cache
   rm -rf "${srcdir}/__pkg__" || :
