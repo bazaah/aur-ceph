@@ -150,6 +150,11 @@ source=(
   # fixes for a bunch of boost::asio deprecated stuff that was removed in 1.87
   'ceph-19.2.1-boost-1.87-fixes.patch'
 
+  # re-add IPv6 support in osd health checks, backport of:
+  # -> https://github.com/ceph/ceph/pull/61323
+  # -> https://github.com/ceph/ceph/pull/60881
+  'ceph-19.2.1-fix-ipv6-support-in-is-addr-in-subnet.patch'
+
   # ===== ceph-python-bcrypt sources ===== #
   "python-bcrypt-${__bcrypt_version}.tar.gz::https://github.com/pyca/bcrypt/archive/${__bcrypt_version}.tar.gz"
 
@@ -188,6 +193,7 @@ sha512sums=('223e9dcacdc05cb1cb56bf1572c5758ed9ad9daac98e858aac535f31d28afbb4a6f
             '00cb26f5697212e8205f4306c030934cba944dbdbea112e277cc4eedb794f144a679f1b5b4a58a6c6627924b24388166502744e5c9937b77def788b3c408fede'
             'd282f5bba40b2e6d30117466f24174e3ea7fe9358f4a51de7bb6af4e9b3beaf6044fad07bab491dd4c4c1e60d20fdbf672b90dfb3c608da70b35be8c227d89c4'
             '234a2b5307e24c5b99204b70bb5e1127f2c7ba591d240f224246e250d75e0d40003b903d08000218bfe01f6895c2465bbf73b3a339d4ea929190ebcf924c3115'
+            '697cda8b11f7bd533b6aa73a71c827cd22a452e002d5f09b9ae70a1cb19fb16dca07a6f6783cb1ea198a36c3bbe2e7d6f76b417c7da86f5c54ae4bf631675244'
             '1a8af20bffa321c4e88c60b9e22ac1139de85033f11014cf1cbfcd261069bf62f7830432715561f3919c14408e408b05b0774a48d1ea954b600adc635fe7cf57'
             '8df2c6028694600b3e1634eaff74d4e789a58463dcf2be86a60be61024e25143f3a44b4deee39a54cf9d93909f9c949f13ea8d4d83b718f37b790fee5aaeba71'
             '14281fbaafff08d59d354ed9a0bb785e6453e45470c31afe193b5489e479cca663afade7a2fcd53b2d9f34380d90046e3729371a90f6abeae00617f52abd5a86')
