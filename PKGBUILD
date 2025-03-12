@@ -29,9 +29,9 @@ makedepends=(
   'libaio'          'libatomic_ops'   'libcap'         'libcap-ng'       'libcurl-compat'
   'libedit'         'libgudev'        'libnl'          'librabbitmq-c'   'librdkafka'
   'libutil-linux'   'libuv'           'libxcrypt'      'lua'             'lz4'
-  'ninja'           'nss'             'oath-toolkit'   'openssl'         'pkgconf'
-  'python'          'snappy'          'sqlite'         'systemd-libs'    'thrift'
-  'util-linux'      'xfsprogs'        'zlib'           'zstd'
+  'nasm'            'ninja'           'nss'            'oath-toolkit'    'openssl'
+  'pkgconf'         'python'          'snappy'         'sqlite'          'systemd-libs'
+  'thrift'          'util-linux'      'xfsprogs'       'zlib'            'zstd'
 
   'python-bcrypt'     'python-cherrypy'  'python-coverage'     'python-dateutil'  'python-jinja'
   'python-packaging'  'python-pecan'     'python-prettytable'  'python-pyjwt'     'python-pyopenssl'

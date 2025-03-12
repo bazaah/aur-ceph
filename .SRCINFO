@@ -49,6 +49,7 @@ pkgbase = ceph
 	makedepends = libxcrypt
 	makedepends = lua
 	makedepends = lz4
+	makedepends = nasm
 	makedepends = ninja
 	makedepends = nss
 	makedepends = oath-toolkit
