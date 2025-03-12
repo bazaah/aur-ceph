@@ -8,7 +8,7 @@ pkgver=19.2.1
 pkgrel=2
 url='https://ceph.com/'
 arch=('x86_64')
-license=('GPL-2.0-or-later OR LGPL-2.1-or-later OR LGPL-3.0-or-later')
+license=('GPL-2.0-or-later' 'LGPL-2.1-or-later' 'LGPL-3.0-or-later')
 pkgname=(
   ceph-{common,compressor,crypto,erasure,tools,test,volume,cephadm,node-proxy}
   ceph-{rados,base,mon,mgr,osd,mds,rbd,cephfs,rgw}
