@@ -1,17 +1,14 @@
 diff --git a/src/common/Graylog.cc b/src/common/Graylog.cc
-index cbd63fab25f..1b45c7c233d 100644
+index cbd63fab25f..612eddd9643 100644
 --- a/src/common/Graylog.cc
 +++ b/src/common/Graylog.cc
-@@ -34,8 +34,10 @@ void Graylog::set_destination(const std::string& host, int port)
+@@ -34,8 +34,7 @@ void Graylog::set_destination(const std::string& host, int port)
  {
    try {
      boost::asio::ip::udp::resolver resolver(m_io_service);
 -    boost::asio::ip::udp::resolver::query query(host, std::to_string(port));
 -    m_endpoint = *resolver.resolve(query);
-+    auto ret = resolver.resolve(host, std::to_string(port));
-+    // ret is guaranteed to be a non-empty list in the case of success
-+    // so this deref-through-iterator is valid (as of boost 1.87)
-+    m_endpoint = (*(ret.begin())).endpoint();
++    m_endpoint = *resolver.resolve(host, std::to_string(port)).cbegin();
      m_log_dst_valid = true;
    } catch (boost::system::system_error const& e) {
      cerr << "Error resolving graylog destination: " << e.what() << std::endl;
@@ -77,6 +74,19 @@ index b3437c6685e..48aaa2673a6 100644
        boost::system::error_code ec;
        timer.async_wait(yield[ec]);
      }
+diff --git a/src/test/common/test_ceph_timer.cc b/src/test/common/test_ceph_timer.cc
+index 925f05bd1f9..971940293c7 100644
+--- a/src/test/common/test_ceph_timer.cc
++++ b/src/test/common/test_ceph_timer.cc
+@@ -66,7 +66,7 @@ void run_orderly()
+                         });
+   }
+ 
+-  EXPECT_LT(first.get(), second.get());
++  EXPECT_TRUE(first.get() < second.get());
+ }
+ 
+ struct Destructo {
 diff --git a/src/test/neorados/completions.cc b/src/test/neorados/completions.cc
 index b6286130bbe..a4684e4dc51 100644
 --- a/src/test/neorados/completions.cc
@@ -102,7 +112,7 @@ index b6286130bbe..a4684e4dc51 100644
    assert(completed == max_completions);
    return 0;
 diff --git a/src/tools/immutable_object_cache/CacheClient.cc b/src/tools/immutable_object_cache/CacheClient.cc
-index 44686529547..d0358163044 100644
+index 44686529547..32a199dbe21 100644
 --- a/src/tools/immutable_object_cache/CacheClient.cc
 +++ b/src/tools/immutable_object_cache/CacheClient.cc
 @@ -20,7 +20,7 @@ namespace ceph {
@@ -119,7 +129,7 @@ index 44686529547..d0358163044 100644
      if (m_worker_thread_num != 0) {
        m_worker = new boost::asio::io_context();
 -      m_worker_io_service_work = new boost::asio::io_context::work(*m_worker);
-+      m_worker_io_service_work = new boost::asio::executor_work_guard<decltype(m_io_service.get_executor())>(m_worker->get_executor());
++      m_worker_io_service_work = new boost::asio::executor_work_guard<boost::asio::io_context::executor_type>(m_worker->get_executor());
        for (uint64_t i = 0; i < m_worker_thread_num; i++) {
          std::thread* thd = new std::thread([this](){m_worker->run();});
          m_worker_threads.push_back(thd);
@@ -133,23 +143,23 @@ index 44686529547..d0358163044 100644
        });
      } else {
 diff --git a/src/tools/immutable_object_cache/CacheClient.h b/src/tools/immutable_object_cache/CacheClient.h
-index 7dc4aa76c13..6220d4681e0 100644
+index 7dc4aa76c13..5122e0906b9 100644
 --- a/src/tools/immutable_object_cache/CacheClient.h
 +++ b/src/tools/immutable_object_cache/CacheClient.h
-@@ -6,6 +6,7 @@
+@@ -5,6 +5,7 @@
+ #define CEPH_CACHE_CACHE_CLIENT_H
  
  #include <atomic>
- #include <boost/asio/io_context.hpp>
 +#include <boost/asio/executor_work_guard.hpp>
+ #include <boost/asio/io_context.hpp>
  #include <boost/asio/local/stream_protocol.hpp>
  #include <boost/algorithm/string.hpp>
- 
 @@ -58,7 +59,7 @@ class CacheClient {
   private:
    CephContext* m_cct;
    boost::asio::io_context m_io_service;
 -  boost::asio::io_context::work m_io_service_work;
-+  boost::asio::executor_work_guard<decltype(m_io_service.get_executor())> m_io_service_work;
++  boost::asio::executor_work_guard<boost::asio::io_context::executor_type> m_io_service_work;
    stream_protocol::socket m_dm_socket;
    stream_protocol::endpoint m_ep;
    std::shared_ptr<std::thread> m_io_thread;
@@ -158,15 +168,15 @@ index 7dc4aa76c13..6220d4681e0 100644
    boost::asio::io_context* m_worker;
    std::vector<std::thread*> m_worker_threads;
 -  boost::asio::io_context::work* m_worker_io_service_work;
-+  boost::asio::executor_work_guard<decltype(m_worker->get_executor())>* m_worker_io_service_work;
++  boost::asio::executor_work_guard<boost::asio::io_context::executor_type>* m_worker_io_service_work;
  
    std::atomic<bool> m_writing;
    std::atomic<bool> m_reading;
 diff --git a/src/tools/immutable_object_cache/CacheServer.cc b/src/tools/immutable_object_cache/CacheServer.cc
-index 14deddce561..bf3a6bda73c 100644
+index 14deddce561..a4c4e3bc36c 100644
 --- a/src/tools/immutable_object_cache/CacheServer.cc
 +++ b/src/tools/immutable_object_cache/CacheServer.cc
-@@ -35,10 +35,11 @@ int CacheServer::run() {
+@@ -35,10 +35,10 @@ int CacheServer::run() {
      return ret;
    }
  
@@ -176,13 +186,12 @@ index 14deddce561..bf3a6bda73c 100644
 -    ldout(cct, 1) << "m_io_service run fails: " << ec.message() << dendl;
 +  try {
 +    ret = m_io_service.run();
-+  }
-+  catch (const std::exception& e) {
++  } catch (const std::exception& e) {
 +    ldout(cct, 1) << "m_io_service run fails: " << e.what() << dendl;
      return -1;
    }
    return 0;
-@@ -66,7 +67,7 @@ int CacheServer::start_accept() {
+@@ -66,7 +66,7 @@ int CacheServer::start_accept() {
      return -ec.value();
    }
  

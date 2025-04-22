@@ -4,11 +4,11 @@
 
 pkgbase='ceph'
 pkgdesc='Distributed, fault-tolerant storage platform delivering object, block, and file system'
-pkgver=19.2.1
-pkgrel=2
+pkgver=19.2.2
+pkgrel=1
 url='https://ceph.com/'
 arch=('x86_64')
-license=('GPL-2.0-or-later OR LGPL-2.1-or-later OR LGPL-3.0-or-later')
+license=('GPL-2.0-or-later' 'LGPL-2.1-or-later' 'LGPL-3.0-or-later')
 pkgname=(
   ceph-{common,compressor,crypto,erasure,tools,test,volume,cephadm,node-proxy}
   ceph-{rados,base,mon,mgr,osd,mds,rbd,cephfs,rgw}
@@ -29,9 +29,9 @@ makedepends=(
   'libaio'          'libatomic_ops'   'libcap'         'libcap-ng'       'libcurl-compat'
   'libedit'         'libgudev'        'libnl'          'librabbitmq-c'   'librdkafka'
   'libutil-linux'   'libuv'           'libxcrypt'      'lua'             'lz4'
-  'ninja'           'nss'             'oath-toolkit'   'openssl'         'pkgconf'
-  'python'          'snappy'          'sqlite'         'systemd-libs'    'thrift'
-  'util-linux'      'xfsprogs'        'zlib'           'zstd'
+  'nasm'            'ninja'           'nss'            'oath-toolkit'    'openssl'
+  'pkgconf'         'python'          'snappy'         'sqlite'          'systemd-libs'
+  'thrift'          'util-linux'      'xfsprogs'       'zlib'            'zstd'
 
   'python-bcrypt'     'python-cherrypy'  'python-coverage'     'python-dateutil'  'python-jinja'
   'python-packaging'  'python-pecan'     'python-prettytable'  'python-pyjwt'     'python-pyopenssl'
@@ -168,7 +168,7 @@ source=(
   # Use our fork of pyo3, reenabling subinterpreter support
   'python-bcrypt-allow-subinterpreters.patch'
 )
-sha512sums=('223e9dcacdc05cb1cb56bf1572c5758ed9ad9daac98e858aac535f31d28afbb4a6f46a4724d9b95e325aef82012a98a5c72c011895999bdd16a30077336c03b3'
+sha512sums=('ee47c1cb7cb5084b87bcc5a35b3df88fb49683524bba8f2e1ced9d2f8891af53e4b5fb5aa153ed6bce31683625d9bf5176bab9f55bc71671f0e34667948f7285'
             '4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049'
             '41dbc1c395cdf9b3edf5c5d91bbc90f416b4338ad964fa3471f26a4312d3ec2a5dcebbc351a1640dc4b047b4f71aa134ac7486747e5f62980092b0176e7567f5'
             'ea069b75b786c22166c609b127b512802cc5c6e9512d792d7b7b34d276f5b86d57c8c35cfc7b5c855a59c0ba87ba1aabe2ca26da72b26bff46b6ba8410ddb27e'
@@ -196,7 +196,7 @@ sha512sums=('223e9dcacdc05cb1cb56bf1572c5758ed9ad9daac98e858aac535f31d28afbb4a6f
             '3e60855d156d7ea3e74569f13a9cb14c75b4abb679c81d1e3b38dac10d17a6930a2116f750e45cda8e1b90e34088e8fc9555d1d996464255b92fb13cc9d06c09'
             '00cb26f5697212e8205f4306c030934cba944dbdbea112e277cc4eedb794f144a679f1b5b4a58a6c6627924b24388166502744e5c9937b77def788b3c408fede'
             'd282f5bba40b2e6d30117466f24174e3ea7fe9358f4a51de7bb6af4e9b3beaf6044fad07bab491dd4c4c1e60d20fdbf672b90dfb3c608da70b35be8c227d89c4'
-            '234a2b5307e24c5b99204b70bb5e1127f2c7ba591d240f224246e250d75e0d40003b903d08000218bfe01f6895c2465bbf73b3a339d4ea929190ebcf924c3115'
+            'f522b4e736a3405429d8c8d8160526c648a044c79613cd64c020c5b4e0b3e1e045be74ff59b6d8766ccc54aac73b4f043546e34477efc40205e8bdcd9407e60c'
             '697cda8b11f7bd533b6aa73a71c827cd22a452e002d5f09b9ae70a1cb19fb16dca07a6f6783cb1ea198a36c3bbe2e7d6f76b417c7da86f5c54ae4bf631675244'
             '608b4255fbc7092247fe0ca2ab51c42fce96dc6b58db9fb7fa65e805fcffaa7acad59131ddd3cb6e219147ffedcf3b1ff026097387923b075483fff32bfbf84d'
             '1a8af20bffa321c4e88c60b9e22ac1139de85033f11014cf1cbfcd261069bf62f7830432715561f3919c14408e408b05b0774a48d1ea954b600adc635fe7cf57'
@@ -282,6 +282,7 @@ build() {
     -DCMAKE_INSTALL_LIBDIR=/usr/lib \
     -DCEPH_SYSTEMD_ENV_DIR=/etc/default \
     -DCMAKE_INSTALL_LIBEXECDIR=/usr/lib \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.13 \
     -DENABLE_GIT_VERSION=ON \
     -DWITH_BABELTRACE=OFF \
     -DWITH_LTTNG=OFF \
