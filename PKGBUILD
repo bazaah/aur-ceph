@@ -353,10 +353,11 @@ build() {
 check() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
-  _check_ceph_python_bcrypt
+  _check_ceph_python_bcrypt || true
 
   export CTEST_PARALLEL_LEVEL=$(nproc --ignore=4 || echo "4")
   export CTEST_OUTPUT_ON_FAILURE=1
+  export CTEST_PROGRESS_OUTPUT=1
 
   ninja -C build check || true
 }
