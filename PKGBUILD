@@ -137,23 +137,11 @@ source=(
   # Partially backported from https://github.com/ceph/ceph/pull/57581
   'ceph-19.2.0-backport-mds-link-boost-urls.patch'
 
-  # Restore access to the ceph-exporter systemd service file, seemingly missed
-  # from v19.2.0
-  'ceph-19.2.0-backport-ceph-exporter.patch'
-
   # Fixes missed include for std::for_each usage in src/common/cohort_lru.h
   'ceph-19.2.0-fix-cohort-lru-include.patch'
 
-  # Make a spurious gcc warning be quiet (next line ensures str is NULL terminated, gcc!)
-  'ceph-19.2.1-quiet-stringop-truncation.patch'
-
   # fixes for a bunch of boost::asio deprecated stuff that was removed in 1.87
   'ceph-19.2.1-boost-1.87-fixes.patch'
-
-  # re-add IPv6 support in osd health checks, backport of:
-  # -> https://github.com/ceph/ceph/pull/61323
-  # -> https://github.com/ceph/ceph/pull/60881
-  'ceph-19.2.1-fix-ipv6-support-in-is-addr-in-subnet.patch'
 
   # fix ceph-volume issues in py3.13 (again)
   # backport of: https://github.com/ceph/ceph/pull/59739
@@ -207,11 +195,8 @@ sha512sums=('ee47c1cb7cb5084b87bcc5a35b3df88fb49683524bba8f2e1ced9d2f8891af53e4b
             '76ddf7dd71355e0b1953d215dbe5a9ce536d4866e604567bc9060f8e02bef6951be8eacd4f8896d97fe05a595aa041ab59dc65653c8fdad88e754d81f6f6b760'
             'b8b3758a496780014821aa442c6fc2ee4797618ef4873d87ef376ad56313f871739d95366d52dec6cbb54c9ca87c4fe4b4473ff79f7800dd339fef31d6569b48'
             '5b03d967b77fbb90e9ec43226cc9e929ee153abae1e6ab6d11b66a9f9eb8261461e724203e84e36c4f2bcbd9450734c994e41bd7daec28230393aa2ded06de3e'
-            '3e60855d156d7ea3e74569f13a9cb14c75b4abb679c81d1e3b38dac10d17a6930a2116f750e45cda8e1b90e34088e8fc9555d1d996464255b92fb13cc9d06c09'
             '00cb26f5697212e8205f4306c030934cba944dbdbea112e277cc4eedb794f144a679f1b5b4a58a6c6627924b24388166502744e5c9937b77def788b3c408fede'
-            'd282f5bba40b2e6d30117466f24174e3ea7fe9358f4a51de7bb6af4e9b3beaf6044fad07bab491dd4c4c1e60d20fdbf672b90dfb3c608da70b35be8c227d89c4'
             'f522b4e736a3405429d8c8d8160526c648a044c79613cd64c020c5b4e0b3e1e045be74ff59b6d8766ccc54aac73b4f043546e34477efc40205e8bdcd9407e60c'
-            '697cda8b11f7bd533b6aa73a71c827cd22a452e002d5f09b9ae70a1cb19fb16dca07a6f6783cb1ea198a36c3bbe2e7d6f76b417c7da86f5c54ae4bf631675244'
             '608b4255fbc7092247fe0ca2ab51c42fce96dc6b58db9fb7fa65e805fcffaa7acad59131ddd3cb6e219147ffedcf3b1ff026097387923b075483fff32bfbf84d'
             '286db9845a005fac92fafd749959419ec7ceca78e50880c31415f3e0477e18d732c763964e743e0e954c0e7b08c25c16793e5caf83d44cfa16033c40f76106b4'
             'e5e2e30da3618407b753af75d5cbfd2898d33e62871c4c7c92d775e63ffbbe23a6b09894ac1a6e30996218388ebfe5f50d903910eafad20648511c92e6f2133d'
