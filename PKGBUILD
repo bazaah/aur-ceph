@@ -274,6 +274,7 @@ build() {
   export CFLAGS+=" ${CPPFLAGS}"
   export CXXFLAGS+=" ${CPPFLAGS}"
   export CMAKE_BUILD_TYPE='RelWithDebInfo'
+  export CMAKE_BUILD_PARALLEL_LEVEL=$(nproc --ignore=4 || echo "4")
   export CMAKE_WARN_UNUSED_CLI=no
 
   cmake \
@@ -332,8 +333,7 @@ build() {
     -DWITH_TESTS=ON \
     -Wno-dev
 
-  ninja -C build legacy-option-headers
-  ninja -C build all
+  cmake --build build -t legacy-option-headers all
 }
 
 check() {
@@ -345,7 +345,7 @@ check() {
   export CTEST_OUTPUT_ON_FAILURE=1
   export CTEST_PROGRESS_OUTPUT=1
 
-  ninja -C build check || true
+  cmake --build build -j $CTEST_PARALLEL_LEVEL -t check || true
 }
 
 _package() {
