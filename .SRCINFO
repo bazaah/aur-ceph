@@ -46,6 +46,7 @@ pkgbase = ceph
 	makedepends = libnl
 	makedepends = librabbitmq-c
 	makedepends = librdkafka
+	makedepends = libnbd
 	makedepends = libutil-linux
 	makedepends = libuv
 	makedepends = libxcrypt
@@ -378,6 +379,7 @@ pkgname = librbd
 	depends = librados=19.2.2-3
 	depends = cryptsetup
 	depends = fmt
+	depends = libnbd
 	provides = librbd.so
 	provides = libceph_librbd_parent_cache.so
 
