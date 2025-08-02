@@ -540,10 +540,8 @@ _make_ceph_packages() {
       $systemd/ceph-radosgw{.target,@.service} \
       $share/bash-completion/completions/radosgw-admin \
       $man/man8/radosgw{,-admin}.8 \
-      $man/man8/rgw-orphan-list.8 \
       $man/man8/ceph-diff-sorted.8 \
-      $man/man8/rgw-policy-check.8 \
-      $man/man8/rgw-restore-bucket-index.8
+      $man/man8/rgw*.8
 
     ###############################################
     #         Ceph clients / applications         #
