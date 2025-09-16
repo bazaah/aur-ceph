@@ -76,10 +76,6 @@ source=(
   # cythonize calls in setup.py when 'egg_info' is a provided directive
   'ceph-17.2.4-pybind-unmock-cythonize.patch'
 
-  # fixes the few usages of std::iterator which has been deprecated in c++17, quieting
-  # a lot of _GLIBCXX17_DEPRECATED line noise during builds
-  'ceph-17.2.5-fix-iterator-depreciations.patch'
-
   # Fixes inspect.getargspec errors due to removal in py3.11
   'ceph-17.2.6-mgr-dashboard-cherrypy-18.patch'
 
@@ -89,57 +85,15 @@ source=(
   # Fixes a couple breaking changes from cython v3.0.0
   'ceph-17.2.6-cython-fixes.patch'
 
-  # Fixes fmtlib v10 issues found in v18.2.x
-  'ceph-18.2.0-fmt10-fixes.patch'
-
   # Fix undefined behavior in unit test for erasure coding (SHEC)
   'ceph-18.2.0-fix-ecode-shec-test.patch'
-
-  # Switch to using std::atomic<std::shared_ptr<T>> where possible
-  'ceph-18.2.2-std-atomic-depreciations.patch'
-
-  # Disable a performance test that regressed, while the upstream is deciding
-  # how to fix it
-  'ceph-18.2.2-test-mempool-shard-select-disable.patch'
-
-  # Since py3.11, but exacerbated in py3.12 there are a bunch of linting errors
-  # that we do not care about, so disable them
-  'ceph-18.2.2-disable-mypy-flake8-tests.patch'
 
   # Fix a host of issues from py3.12 in the pybind / cephadm code
   'ceph-18.2.2-py312-fixes.patch'
 
-  # Fixes for 3 problems found when using boost 1.86
-  # - casting uuid to *char
-  # - missing header for boost::mt11213b
-  # - undef of Boost.MPL header before including <boost/python/*> headers
-  'ceph-18.2.4-boost-1.86-fixes.patch'
-
   # Since fmt 11 we are seeing widespread compile errors because
   # various custom type fmt:formatter::format defintions are not const.
   'ceph-18.2.4-fmt-formatter-const.patch'
-
-  # Work around removed PySys_* API usage in src/mgr this is largely
-  # a rebased backport of https://github.com/ceph/ceph/pull/58199
-  'ceph-18.2.4-avoid-cpython-pysys-api.patch'
-
-  # Fix more random broken stuff from py3.13 this time; pip's build of
-  # python-xmlsec (from python-saml) is completely broken so we use sitepackages
-  'ceph-18.2.4-py313-fixes.patch'
-
-  # Don't use the now-unsupported header only version of Boost.Url
-  # Partially backported from https://github.com/ceph/ceph/pull/57581
-  'ceph-19.2.0-backport-mds-link-boost-urls.patch'
-
-  # Fixes missed include for std::for_each usage in src/common/cohort_lru.h
-  'ceph-19.2.0-fix-cohort-lru-include.patch'
-
-  # fixes for a bunch of boost::asio deprecated stuff that was removed in 1.87
-  'ceph-19.2.1-boost-1.87-fixes.patch'
-
-  # fix ceph-volume issues in py3.13 (again)
-  # backport of: https://github.com/ceph/ceph/pull/59739
-  'ceph-19.2.1-backport-fix-importlib-metadata-compat.patch'
 
   # Bundled rocksdb and gcc >=15.1 don't agree on imports, so appease gcc
   'ceph-19.2.2-rocksdb-cstdint.patch'
@@ -148,12 +102,6 @@ source=(
   # the library, so we have to do it the hard way
   # https://github.com/boostorg/process/issues/480
   'ceph-19.2.2-rgw-lua-boost-process-v1.patch'
-
-  # Backport of three commits from main to get this working with gcc 15
-  # -> https://github.com/ceph/ceph/pull/57430
-  # -> https://github.com/ceph/ceph/pull/59051
-  # -> https://github.com/ceph/ceph/pull/61559
-  'ceph-19.2.2-gcc15-zpp-bits.patch'
 
   # Backport of https://github.com/ceph/ceph/pull/62951, fixed up for v19
   'ceph-20.2.0-backport-pybind-avoid-pyo3-errors-by-child-process.patch'
