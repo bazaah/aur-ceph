@@ -44,20 +44,20 @@ index 00000000000..534c7e70571
 +#include <boost/process/v1/start_dir.hpp>
 +#endif
 diff --git a/src/rgw/driver/rados/rgw_sal_rados.cc b/src/rgw/driver/rados/rgw_sal_rados.cc
-index 3e9f9070296..71fa94713da 100644
+index a8e0a8e2292..3e7eb6fe096 100644
 --- a/src/rgw/driver/rados/rgw_sal_rados.cc
 +++ b/src/rgw/driver/rados/rgw_sal_rados.cc
 @@ -20,7 +20,7 @@
  #include <unistd.h>
- #include <sstream>
+ 
  #include <boost/algorithm/string.hpp>
 -#include <boost/process.hpp>
 +#include "include/boost_process_compat.hpp"
  
- #include "common/async/blocked_completion.h"
- #include "include/function2.hpp"
+ #include <fmt/core.h>
+ 
 diff --git a/src/rgw/rgw_lua.cc b/src/rgw/rgw_lua.cc
-index 64643234a4a..9836a9fc122 100644
+index b9c74cf730b..68ccd068ddb 100644
 --- a/src/rgw/rgw_lua.cc
 +++ b/src/rgw/rgw_lua.cc
 @@ -8,7 +8,7 @@
