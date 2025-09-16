@@ -274,8 +274,7 @@ build() {
   export CFLAGS+=" ${CPPFLAGS}"
   export CXXFLAGS+=" ${CPPFLAGS}"
   export CMAKE_BUILD_TYPE='RelWithDebInfo'
-  export CMAKE_BUILD_PARALLEL_LEVEL=$(nproc --ignore=4 || echo "4")
-  export CMAKE_WARN_UNUSED_CLI=no
+  export CMAKE_BUILD_PARALLEL_LEVEL=$(nproc --ignore=1 || echo "4")
 
   cmake \
     -G Ninja \
@@ -333,7 +332,7 @@ build() {
     -DWITH_TESTS=ON \
     -Wno-dev
 
-  cmake --build build -t legacy-option-headers all
+  cmake --build build -t all tests
 }
 
 check() {
@@ -341,11 +340,13 @@ check() {
 
   _check_ceph_python_bcrypt || true
 
-  export CTEST_PARALLEL_LEVEL=$(nproc --ignore=4 || echo "4")
-  export CTEST_OUTPUT_ON_FAILURE=1
-  export CTEST_PROGRESS_OUTPUT=1
-
-  cmake --build build -j $CTEST_PARALLEL_LEVEL -t check || true
+  (
+    cd build
+    ctest -j $(nproc --ignore=1 || echo "4") \
+      --progress \
+      --output-on-failure \
+      || true
+  )
 }
 
 _package() {
