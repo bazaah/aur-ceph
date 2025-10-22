@@ -86,7 +86,7 @@ source=(
   # Bundled rocksdb and gcc >=15.1 don't agree on imports, so appease gcc
   'ceph-19.2.2-rocksdb-cstdint.patch'
 
-  # Backport of https://github.com/ceph/ceph/pull/62951, fixed up for v19
+  # Backport of https://github.com/ceph/ceph/pull/62951
   'ceph-20.2.0-backport-pybind-avoid-pyo3-errors-by-child-process.patch'
 
   # Exclude python lint / fmt / tool checking from project test suite
@@ -118,7 +118,7 @@ sha512sums=('278101d2df7bed5363b20c2b065d7a7b26252c8164511257e213ffaa58d50901555
             '9ac249cdb49ab1d1ff56bbec5e42b548dea5e0121310ccc41db8e987dceaf01dd2354aa8f97e6c0bccf067cefc98eb39fecef8b92a5722bfce7d08646cdf47ad'
             '1547210e4b2a64d5fe3d45621d6f17fe91cb38592fc799a446aba6dc4e363b7e16f807e502cc739ce489f637bbfafadaee5657e86e7475edd67e39226e76fd2b'
             '286db9845a005fac92fafd749959419ec7ceca78e50880c31415f3e0477e18d732c763964e743e0e954c0e7b08c25c16793e5caf83d44cfa16033c40f76106b4'
-            'feaf80ff80067e6d3fec07e053055a4bcec98b886d81a171fa09ab72c6f4bf6b79c3462dc967d79674d2c3cb5393665ba37d5de0a537195f78e3bb39c9aca3b8'
+            'feb7d6a5b81b1bf3c9117a76287c88b521828265e739a0f36fe9115d936533ae83b23d76ce2fce86ab3432535184625bfe85b0f3f94d86d6f97ab70ffa493788'
             '9bc32100aeb10099c05bd175f422f30f4c415755129e675dfb52212a9f822fcdae40638fe8351eed03816aacf41290837d5a900e81d7d9760e8a8c7c97679ee3'
             '9e88e6138d384c995f3ad89493ca79008e06aea78a23f938761eda593b56e0055e6c9cdf8fe07298f4eb23aedd8d519fa5d635477c8ecc2ec0a245b16c68ea18'
             'e07f77097b1ba49cdcbad432225f3b11b8df5dad003624f13bd5c7f33c48c30354486a4b294733d2abc26790f74feb01e334a8ce02adaed435287fe52ac4b91c'
