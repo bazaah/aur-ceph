@@ -1,28 +1,38 @@
-commit 1de26f643ada5fd58e158c4b28a7c610b872c22b
-Author: Paul Stemmet <aur@luxolus.com>
-Date:   Thu Oct 2 22:38:46 2025 +0000
-
-    mgr:python: avoid pyo3 errors by running certain cryptographic functions in a child process
-    
-    This is a backport of ceph/ceph#62951, rebased onto v19.2.3.
-    All credit for this work goes to @phlogistonjohn.
-    
-    Upstream-ref: https://github.com/ceph/ceph/commit/7094a5a44d90e705141dbae9739e6c0835bf7ce3
-    References: https://github.com/ceph/ceph/pull/62951
-
+diff --git a/src/pybind/mgr/cephadm/cert_mgr.py b/src/pybind/mgr/cephadm/cert_mgr.py
+index aabc587db17..b0514b0695b 100644
+--- a/src/pybind/mgr/cephadm/cert_mgr.py
++++ b/src/pybind/mgr/cephadm/cert_mgr.py
+@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Tuple, Union, List, Dict, Optional, cast, Any
+ import logging
+ 
+ from cephadm.ssl_cert_utils import SSLCerts, SSLConfigException
+-from mgr_util import verify_tls, verify_cacrt_content, ServerConfigException
++from mgr_util import verify_tls, certificate_days_to_expire, ServerConfigException
+ from cephadm.ssl_cert_utils import get_certificate_info, get_private_key_info
+ from cephadm.tlsobject_types import Cert, PrivKey
+ from cephadm.tlsobject_store import TLSObjectStore, TLSObjectScope, TLSObjectException
+@@ -350,7 +350,7 @@ class CertMgr:
+         Returns: CertInfo
+         """
+         try:
+-            days_to_expiration = verify_tls(cert.cert, key.key) if key else verify_cacrt_content(cert.cert)
++            days_to_expiration = verify_tls(cert.cert, key.key) if key else certificate_days_to_expire(cert.cert)
+             is_close_to_expiration = days_to_expiration < self.mgr.certificate_renewal_threshold_days
+             return CertInfo(cert_name, target, cert.user_made, True, is_close_to_expiration, days_to_expiration, "")
+         except ServerConfigException as e:
 diff --git a/src/pybind/mgr/cephadm/module.py b/src/pybind/mgr/cephadm/module.py
-index a8b71a1081e..9ab23cbc59b 100644
+index 1c88ad735ed..4088163628d 100644
 --- a/src/pybind/mgr/cephadm/module.py
 +++ b/src/pybind/mgr/cephadm/module.py
-@@ -35,6 +35,7 @@ from ceph.deployment.service_spec import \
-     HostPlacementSpec, IngressSpec, \
-     TunedProfileSpec, IscsiServiceSpec
+@@ -45,6 +45,7 @@ from ceph.deployment.service_spec import (
+ )
+ from ceph.deployment.drive_group import DeviceSelection
  from ceph.utils import str_to_datetime, datetime_to_str, datetime_now
 +from ceph.cryptotools.select import choose_crypto_caller
- from cephadm.serve import CephadmServe
+ from cephadm.serve import CephadmServe, REQUIRES_POST_ACTIONS
  from cephadm.services.cephadmservice import CephadmDaemonDeploySpec
  from cephadm.http_server import CephadmHttpServer
-@@ -545,6 +546,10 @@ class CephadmOrchestrator(orchestrator.Orchestrator, MgrModule,
+@@ -502,6 +503,10 @@ class CephadmOrchestrator(orchestrator.Orchestrator, MgrModule,
          super(CephadmOrchestrator, self).__init__(*args, **kwargs)
          self._cluster_fsid: str = self.get('mon_map')['fsid']
          self.last_monmap: Optional[datetime.datetime] = None
@@ -34,10 +44,10 @@ index a8b71a1081e..9ab23cbc59b 100644
          # for serve()
          self.run = True
 diff --git a/src/pybind/mgr/cephadm/tests/test_cephadm.py b/src/pybind/mgr/cephadm/tests/test_cephadm.py
-index e38d8f9c10b..22e2936200c 100644
+index 5d1260ddf5d..711d47ba9d9 100644
 --- a/src/pybind/mgr/cephadm/tests/test_cephadm.py
 +++ b/src/pybind/mgr/cephadm/tests/test_cephadm.py
-@@ -2099,12 +2099,10 @@ class TestCephadm(object):
+@@ -1868,12 +1868,10 @@ class TestCephadm(object):
              ), CephadmOrchestrator.apply_container),
          ]
      )
@@ -51,10 +61,10 @@ index e38d8f9c10b..22e2936200c 100644
          with with_host(cephadm_module, 'test'):
              with with_service(cephadm_module, spec, meth, 'test'):
 diff --git a/src/pybind/mgr/dashboard/module.py b/src/pybind/mgr/dashboard/module.py
-index 677d88fb678..f7676c702aa 100644
+index d566edc3b01..9ce6d12ea50 100644
 --- a/src/pybind/mgr/dashboard/module.py
 +++ b/src/pybind/mgr/dashboard/module.py
-@@ -21,6 +21,7 @@ if TYPE_CHECKING:
+@@ -23,6 +23,7 @@ if TYPE_CHECKING:
      else:
          from typing_extensions import Literal
  
@@ -62,15 +72,15 @@ index 677d88fb678..f7676c702aa 100644
  from mgr_module import CLIReadCommand, CLIWriteCommand, HandleCommandResult, \
      MgrModule, MgrStandbyModule, NotifyType, Option, _get_localized_key
  from mgr_util import ServerConfigException, build_url, \
-@@ -335,6 +336,7 @@ class Module(MgrModule, CherryPyConfig):
-                min=400, max=599),
+@@ -276,6 +277,7 @@ class Module(MgrModule, CherryPyConfig):
          Option(name='redirect_resolve_ip_addr', type='bool', default=False),
          Option(name='cross_origin_url', type='str', default=''),
+         Option(name='sso_oauth2', type='bool', default=False),
 +        Option(name='crypto_caller', type='str', default=''),
      ]
      MODULE_OPTIONS.extend(options_schema_list())
      for options in PLUGIN_MANAGER.hook.get_options() or []:
-@@ -348,6 +350,9 @@ class Module(MgrModule, CherryPyConfig):
+@@ -289,6 +291,9 @@ class Module(MgrModule, CherryPyConfig):
      def __init__(self, *args, **kwargs):
          super(Module, self).__init__(*args, **kwargs)
          CherryPyConfig.__init__(self)
@@ -80,7 +90,7 @@ index 677d88fb678..f7676c702aa 100644
  
          mgr.init(self)
  
-@@ -565,6 +570,9 @@ class StandbyModule(MgrStandbyModule, CherryPyConfig):
+@@ -564,6 +569,9 @@ class StandbyModule(MgrStandbyModule, CherryPyConfig):
          super(StandbyModule, self).__init__(*args, **kwargs)
          CherryPyConfig.__init__(self)
          self.shutdown_event = threading.Event()
@@ -91,7 +101,7 @@ index 677d88fb678..f7676c702aa 100644
          # We can set the global mgr instance to ourselves even though
          # we're just a standby, because it's enough for logging.
 diff --git a/src/pybind/mgr/dashboard/services/access_control.py b/src/pybind/mgr/dashboard/services/access_control.py
-index 01d0557740b..89a7de5fbe4 100644
+index 926c35cc2dd..4ce10da2692 100644
 --- a/src/pybind/mgr/dashboard/services/access_control.py
 +++ b/src/pybind/mgr/dashboard/services/access_control.py
 @@ -12,7 +12,7 @@ from datetime import datetime, timedelta
@@ -103,7 +113,7 @@ index 01d0557740b..89a7de5fbe4 100644
  from mgr_module import CLICheckNonemptyFileInput, CLIReadCommand, CLIWriteCommand
  from mgr_util import password_hash
  
-@@ -890,7 +890,10 @@ def ac_user_set_password_hash(_, username: str, inbuf: str):
+@@ -929,7 +929,10 @@ def ac_user_set_password_hash(_, username: str, inbuf: str):
      hashed_password = inbuf
      try:
          # make sure the hashed_password is actually a bcrypt hash
@@ -116,18 +126,18 @@ index 01d0557740b..89a7de5fbe4 100644
          user.set_password_hash(hashed_password)
  
 diff --git a/src/pybind/mgr/mgr_util.py b/src/pybind/mgr/mgr_util.py
-index 8d71dd69128..9f0e9b398e3 100644
+index 8fb9c998247..8574bf5f728 100644
 --- a/src/pybind/mgr/mgr_util.py
 +++ b/src/pybind/mgr/mgr_util.py
-@@ -3,7 +3,6 @@ import os
+@@ -10,7 +10,6 @@ from ceph.fs.earmarking import (
  if 'UNITTEST' in os.environ:
-     import tests
+     import tests  # noqa
  
 -import bcrypt
  import cephfs
  import contextlib
  import datetime
-@@ -25,6 +24,7 @@ else:
+@@ -33,6 +32,7 @@ else:
  from typing import Tuple, Any, Callable, Optional, Dict, TYPE_CHECKING, TypeVar, List, Iterable, Generator, Generic, Iterator
  
  from ceph.deployment.utils import wrap_ipv6
@@ -135,7 +145,7 @@ index 8d71dd69128..9f0e9b398e3 100644
  
  T = TypeVar('T')
  
-@@ -531,20 +531,9 @@ def create_self_signed_cert(organisation: str = 'Ceph',
+@@ -627,20 +627,9 @@ def create_self_signed_cert(organisation: str = 'Ceph',
  
      """
  
@@ -156,7 +166,7 @@ index 8d71dd69128..9f0e9b398e3 100644
      if dname:
          # dname received, so check it contains valid RDNs
          if not all(field in valid_RDN_list for field in dname):
-@@ -552,43 +541,18 @@ def create_self_signed_cert(organisation: str = 'Ceph',
+@@ -648,48 +637,18 @@ def create_self_signed_cert(organisation: str = 'Ceph',
      else:
          dname = {"O": organisation, "CN": common_name}
  
@@ -173,33 +183,38 @@ index 8d71dd69128..9f0e9b398e3 100644
 -    cert.set_issuer(cert.get_subject())
 -    cert.set_pubkey(pkey)
 -    cert.sign(pkey, 'sha512')
+-
+-    cert = crypto.dump_certificate(crypto.FILETYPE_PEM, cert)
+-    pkey = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkey)
 +    cc = get_crypto_caller()
 +    pkey = cc.create_private_key()
 +    cert = cc.create_self_signed_cert(dname, pkey)
 +    return cert, pkey
  
--    cert = crypto.dump_certificate(crypto.FILETYPE_PEM, cert)
--    pkey = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkey)
- 
 -    return cert.decode('utf-8'), pkey.decode('utf-8')
--
+ 
 -
 -def verify_cacrt_content(crt):
--    # type: (str) -> None
+-    # type: (str) -> int
 -    from OpenSSL import crypto
 +def certificate_days_to_expire(crt: str) -> int:
      try:
 -        crt_buffer = crt.encode("ascii") if isinstance(crt, str) else crt
 -        x509 = crypto.load_certificate(crypto.FILETYPE_PEM, crt_buffer)
+-        no_after = x509.get_notAfter()
+-        if not no_after:
+-            raise ServerConfigException("Certificate does not have an expiration date.")
+-
+-        end_date = datetime.datetime.strptime(no_after.decode('ascii'), '%Y%m%d%H%M%SZ')
 -        if x509.has_expired():
 -            org, cn = get_cert_issuer_info(crt)
--            no_after = x509.get_notAfter()
--            end_date = None
--            if no_after is not None:
--                end_date = datetime.datetime.strptime(no_after.decode('ascii'), '%Y%m%d%H%M%SZ')
 -            msg = f'Certificate issued by "{org}/{cn}" expired on {end_date}'
 -            logger.warning(msg)
 -            raise ServerConfigException(msg)
+-
+-        # Certificate still valid, calculate and return days until expiration
+-        return (end_date - datetime.datetime.utcnow()).days
+-
 -    except (ValueError, crypto.Error) as e:
 -        raise ServerConfigException(f'Invalid certificate: {e}')
 +        cc = get_crypto_caller()
@@ -209,7 +224,7 @@ index 8d71dd69128..9f0e9b398e3 100644
  
  
  def verify_cacrt(cert_fname):
-@@ -602,58 +566,28 @@ def verify_cacrt(cert_fname):
+@@ -703,7 +662,7 @@ def verify_cacrt(cert_fname):
  
      try:
          with open(cert_fname) as f:
@@ -218,11 +233,12 @@ index 8d71dd69128..9f0e9b398e3 100644
      except ValueError as e:
          raise ServerConfigException(
              'Invalid certificate {}: {}'.format(cert_fname, str(e)))
+@@ -711,52 +670,21 @@ def verify_cacrt(cert_fname):
  
- def get_cert_issuer_info(crt: str) -> Tuple[Optional[str],Optional[str]]:
+ def get_cert_issuer_info(crt: str) -> Tuple[Optional[str], Optional[str]]:
      """Basic validation of a ca cert"""
 -
--    from OpenSSL import crypto, SSL
+-    from OpenSSL import crypto, SSL  # noqa
 +    cc = get_crypto_caller()
      try:
 -        crt_buffer = crt.encode("ascii") if isinstance(crt, str) else crt
@@ -241,12 +257,12 @@ index 8d71dd69128..9f0e9b398e3 100644
 +    except ValueError as err:
 +        raise ServerConfigException(f'Invalid certificate key: {err}')
  
+ 
  def verify_tls(crt, key):
--    # type: (str, str) -> None
--    verify_cacrt_content(crt)
+     # type: (str, str) -> int
+-    days_to_expiration = verify_cacrt_content(crt)
 -
 -    from OpenSSL import crypto, SSL
-+    # type: (str, str) -> int
 +    cc = get_crypto_caller()
      try:
 -        _key = crypto.load_privatekey(crypto.FILETYPE_PEM, key)
@@ -276,11 +292,10 @@ index 8d71dd69128..9f0e9b398e3 100644
 +        cc.verify_tls(crt, key)
 +    except ValueError as err:
 +        raise ServerConfigException(str(err))
-+    return days_to_expiration
+     return days_to_expiration
  
  
- def verify_tls_files(cert_fname, pkey_fname):
-@@ -681,24 +615,14 @@ def verify_tls_files(cert_fname, pkey_fname):
+@@ -785,24 +713,14 @@ def verify_tls_files(cert_fname, pkey_fname):
      if not os.path.isfile(pkey_fname):
          raise ServerConfigException('private key %s does not exist' % pkey_fname)
  
@@ -311,37 +326,34 @@ index 8d71dd69128..9f0e9b398e3 100644
  
  
  def get_most_recent_rate(rates: Optional[List[Tuple[float, float]]]) -> float:
-@@ -876,11 +800,30 @@ def profile_method(skip_attribute: bool = False) -> Callable[[Callable[..., T]],
+@@ -982,16 +900,6 @@ def profile_method(skip_attribute: bool = False) -> Callable[[Callable[..., T]],
      return outer
  
  
-+def parse_combined_pem_file(pem_data: str) -> Tuple[Optional[str], Optional[str]]:
-+
-+    # Extract the certificate
-+    cert_start = "-----BEGIN CERTIFICATE-----"
-+    cert_end = "-----END CERTIFICATE-----"
-+    cert = None
-+    if cert_start in pem_data and cert_end in pem_data:
-+        cert = pem_data[pem_data.index(cert_start):pem_data.index(cert_end) + len(cert_end)]
-+
-+    # Extract the private key
-+    key_start = "-----BEGIN PRIVATE KEY-----"
-+    key_end = "-----END PRIVATE KEY-----"
-+    private_key = None
-+    if key_start in pem_data and key_end in pem_data:
-+        private_key = pem_data[pem_data.index(key_start):pem_data.index(key_end) + len(key_end)]
-+
-+    return cert, private_key
-+
-+
- def password_hash(password: Optional[str], salt_password: Optional[str] = None) -> Optional[str]:
-     if not password:
-         return None
-     if not salt_password:
+-def password_hash(password: Optional[str], salt_password: Optional[str] = None) -> Optional[str]:
+-    if not password:
+-        return None
+-    if not salt_password:
 -        salt = bcrypt.gensalt()
 -    else:
 -        salt = salt_password.encode('utf8')
 -    return bcrypt.hashpw(password.encode('utf8'), salt).decode('utf8')
+-
+-
+ def parse_combined_pem_file(pem_data: str) -> Tuple[Optional[str], Optional[str]]:
+ 
+     # Extract the certificate
+@@ -1009,3 +917,14 @@ def parse_combined_pem_file(pem_data: str) -> Tuple[Optional[str], Optional[str]
+         private_key = pem_data[pem_data.index(key_start):pem_data.index(key_end) + len(key_end)]
+ 
+     return cert, private_key
++
++
++def password_hash(password: Optional[str], salt_password: Optional[str] = None) -> Optional[str]:
++    if not password:
++        return None
++
++    if not salt_password:
 +        salt_password = ''
 +
 +    cc = get_crypto_caller()
