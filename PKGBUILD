@@ -5,7 +5,7 @@
 pkgbase='ceph'
 pkgdesc='Distributed, fault-tolerant storage platform delivering object, block, and file system'
 pkgver=19.2.3
-pkgrel=2
+pkgrel=3
 url='https://ceph.com/'
 arch=('x86_64')
 license=('GPL-2.0-or-later' 'LGPL-2.1-or-later' 'LGPL-3.0-or-later')
@@ -155,6 +155,10 @@ source=(
   # -> https://github.com/ceph/ceph/pull/61559
   'ceph-19.2.2-gcc15-zpp-bits.patch'
 
+  # Fixes for boost 1.89, unfortunately, this is only a partial fix for the
+  # boost_system linkage
+  'ceph-19.2.3-boost-189-fixes.patch'
+
   # Backport of https://github.com/ceph/ceph/pull/62951, fixed up for v19
   'ceph-20.2.0-backport-pybind-avoid-pyo3-errors-by-child-process.patch'
 )
@@ -188,6 +192,7 @@ sha512sums=('278101d2df7bed5363b20c2b065d7a7b26252c8164511257e213ffaa58d50901555
             '286db9845a005fac92fafd749959419ec7ceca78e50880c31415f3e0477e18d732c763964e743e0e954c0e7b08c25c16793e5caf83d44cfa16033c40f76106b4'
             'e5e2e30da3618407b753af75d5cbfd2898d33e62871c4c7c92d775e63ffbbe23a6b09894ac1a6e30996218388ebfe5f50d903910eafad20648511c92e6f2133d'
             '11dc750efc49c43bb945b79504260785453c65fba915ae24beff43f19e541a3dbeb320624c8a3649b04ceabccf7e7f4216776e82ecd54719351d1757ddf2c6c8'
+            '4aa5dbc9b4e7adda5a7248c9c2440ba028c15e48a09460d041bbf8e45dfd689be3978283db98e23f91e5d319779770dddd74e239a6c5ae37e68dee281dba275f'
             'feaf80ff80067e6d3fec07e053055a4bcec98b886d81a171fa09ab72c6f4bf6b79c3462dc967d79674d2c3cb5393665ba37d5de0a537195f78e3bb39c9aca3b8')
 __version="${pkgver}-${pkgrel}"
 
@@ -302,6 +307,10 @@ build() {
     -DENABLE_SHARED=ON \
     -DWITH_TESTS=ON \
     -Wno-dev
+
+  # Ugly, ugly hack until I can figure out what is adding Boost::system to
+  # target_link_libraries
+  sed -i -e 's|-lboost_system ||g' build/build.ninja
 
   cmake --build build -t all tests
 }
