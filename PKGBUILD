@@ -148,21 +148,6 @@ prepare() {
     fi
   done
 
-  # fix boost stuff for system-boost
-  find . -name '*.cmake' -or -name 'CMakeLists.txt' -print0 | xargs --null \
-    sed -r \
-    -e 's|Boost::|boost_|g' \
-    -e 's|Boost_|boost_|g' \
-    -e 's|[Bb]oost_boost|boost_system|g' -i || exit 1
-
-  # remove tests that require root privileges
-  rm src/test/cli/ceph-authtool/cap*.t
-  sed -i '/add_ceph_test(mgr-dashboard-smoke.sh/d' src/test/mgr/CMakeLists.txt
-
-  # disable/remove broken tests
-  sed -i '/add_ceph_test(smoke.sh/d' src/test/CMakeLists.txt
-  sed -i '/add_ceph_test(safe-to-destroy.sh/d' src/test/osd/CMakeLists.txt
-
   # The mgr C++ daemon injects a 'ceph_module' python module into the context
   # of all python mgr modules, but this is absent from test code.
   #
