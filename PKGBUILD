@@ -148,6 +148,22 @@ prepare() {
     fi
   done
 
+  # === Disable broken tests ===
+
+  # The ceph tarballs do not include the ceph-erasure-code-corpus submodule so
+  # this test fails with: "FAILED no tests found to run"
+  sed -i '/add_ceph_test(readable.sh/d' src/test/encoding/CMakeLists.txt
+
+  # === Python test & related machinery patching ===
+  #
+  # These are too small (or change too frequently) to be distinct patches, but
+  # are annoying and cause spurious test failures
+
+  # pyfakefs <=5.6.0 do not work on python >=3.13
+  # Note however, the test suite will still partially fail (wants root) but
+  # at least it runs
+  sed -i 's|pyfakefs == 5\.3\.5|pyfakefs == 5.10.2|' src/cephadm/tox.ini
+
   # The mgr C++ daemon injects a 'ceph_module' python module into the context
   # of all python mgr modules, but this is absent from test code.
   #
@@ -162,8 +178,7 @@ prepare() {
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
-  export CFLAGS+=" ${CPPFLAGS}"
-  export CXXFLAGS+=" ${CPPFLAGS}"
+  export CFLAGS CXXFLAGS
   export CMAKE_BUILD_TYPE='RelWithDebInfo'
   export CMAKE_BUILD_PARALLEL_LEVEL=$(nproc --ignore=1 || echo "4")
 
@@ -172,10 +187,10 @@ build() {
     -B build \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_SYSCONFDIR=/etc \
-    -DCMAKE_INSTALL_SBINDIR=/usr/bin \
-    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
-    -DCEPH_SYSTEMD_ENV_DIR=/etc/default \
-    -DCMAKE_INSTALL_LIBEXECDIR=/usr/lib \
+    -DCMAKE_INSTALL_BINDIR=bin \
+    -DCMAKE_INSTALL_SBINDIR=bin \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_INSTALL_LIBEXECDIR=lib \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.13 \
     -DENABLE_GIT_VERSION=ON \
     -DWITH_BABELTRACE=OFF \
@@ -315,21 +330,9 @@ _make_ceph_packages() {
     rm -rv $bin/ceph_multi_stress_watch
     rm -rv $bin/ceph-coverage
 
-    # Old ssh key stuff
-    rm -vf $share/ceph/*drop.ceph*
-
-    # TODO: Move this into a patch
-    # Fix EnvironmentFile location in systemd service files
-    sed -i -e 's|/etc/sysconfig/|/etc/conf.d/|g' $systemd/*.service
-
     # Fix bash completions path
     install -d -m 755 "$share/bash-completion"
     mv -v $etc/bash_completion.d $share/bash-completion/completions
-
-    # TODO: Move this into a patch
-    # Fix sbin dir (cmake opt seems to have no effect)
-    mv -v $sbin/* $bin/
-    rm -vrf $sbin
 
     ###############################################
     #         Ceph core libraries                 #
