@@ -249,6 +249,10 @@ check() {
       --progress \
       --output-on-failure \
       || true
+
+    # Expected test failures (as of 2025-11-19T12:01:57Z)
+    # - run-tox-cephadm
+    # - unittest_mds_quiesce_agent
   )
 }
 
