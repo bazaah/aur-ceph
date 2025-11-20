@@ -413,7 +413,7 @@ _make_ceph_packages() {
 
     _package ceph-osd \
       $bin/ceph-osd \
-      $bin/ceph-{osdomap,bluestore}-tool \
+      $bin/ceph-bluestore-tool \
       $bin/osdmaptool \
       $bin/crushdiff \
       $bin/ceph-objectstore-tool \
@@ -444,7 +444,7 @@ _make_ceph_packages() {
 
     _package librbd \
       $inc/rbd/* \
-      $lib/librbd.so{,.1,.1.19.0} \
+      $lib/librbd.so{,.1,.1.20.0} \
       $lib/ceph/librbd/*
 
     _package ceph-rbd \
@@ -461,9 +461,12 @@ _make_ceph_packages() {
 
     _package libcephfs \
       $inc/cephfs/* \
-      $lib/libcephfs.so{,.2,.2.0.0}
+      $lib/pkgconfig/cephfs.pc \
+      $lib/libcephfs.so{,.2,.2.0.0} \
+      $lib/libcephfs_proxy.so{,.2,.2.0.0}
 
     _package ceph-cephfs \
+      $bin/libcephfsd \
       $bin/cephfs-{data-scan,{journal,table}-tool,mirror} \
       $bin/ceph-fuse \
       $bin/mount.{ceph,fuse.ceph} \
@@ -524,6 +527,7 @@ _make_ceph_packages() {
       $bin/ceph_perf_objectstore \
       $bin/ceph_omapbench \
       $bin/ceph-syn \
+      $bin/ceph-dedup-daemon \
       $man/man8/ceph-syn.8
 
     ###############################################
