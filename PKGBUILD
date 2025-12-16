@@ -96,16 +96,16 @@ source=(
   # boost_system linkage
   'ceph-19.2.3-boost-189-fixes.patch'
 
-  # Backport of a fix for EC pool corruption when allow_ec_overwrites is enabled
-  # -> https://github.com/bazaah/aur-ceph/issues/34
-  # -> https://tracker.ceph.com/issues/70390
-  'ceph-19.2.3-backport-ec-corruption-fix.patch'
-
   # Backport of https://github.com/ceph/ceph/pull/62951, fixed up for v19
   'ceph-20.2.0-backport-pybind-avoid-pyo3-errors-by-child-process.patch'
 
   # Exclude python lint / fmt / tool checking from project test suite
   'ceph-20.2.0-restrict-tox-tests.patch'
+
+  # Backport of a fix for EC pool corruption when allow_ec_overwrites is enabled
+  # -> https://github.com/bazaah/aur-ceph/issues/34
+  # -> https://tracker.ceph.com/issues/70390
+  'ceph-20.2.0-backport-ec-corruption-fix.patch'
 )
 sha512sums=('278101d2df7bed5363b20c2b065d7a7b26252c8164511257e213ffaa58d509015558183de10bc9281bcbe4d9f85244bcac5bba4db9823e28df6a96d0b687d00a'
             '4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049'
@@ -121,9 +121,9 @@ sha512sums=('278101d2df7bed5363b20c2b065d7a7b26252c8164511257e213ffaa58d50901555
             '286db9845a005fac92fafd749959419ec7ceca78e50880c31415f3e0477e18d732c763964e743e0e954c0e7b08c25c16793e5caf83d44cfa16033c40f76106b4'
             'e5e2e30da3618407b753af75d5cbfd2898d33e62871c4c7c92d775e63ffbbe23a6b09894ac1a6e30996218388ebfe5f50d903910eafad20648511c92e6f2133d'
             '4aa5dbc9b4e7adda5a7248c9c2440ba028c15e48a09460d041bbf8e45dfd689be3978283db98e23f91e5d319779770dddd74e239a6c5ae37e68dee281dba275f'
-            '40d1943593955589cc9e857d3c97543f864857f8f0d928b59edb59e44dd371e565f8830e494934c410d339a8521288a397e10abe547f7abe8f3c2539ec56bef2'
             'feaf80ff80067e6d3fec07e053055a4bcec98b886d81a171fa09ab72c6f4bf6b79c3462dc967d79674d2c3cb5393665ba37d5de0a537195f78e3bb39c9aca3b8'
-            '9bc32100aeb10099c05bd175f422f30f4c415755129e675dfb52212a9f822fcdae40638fe8351eed03816aacf41290837d5a900e81d7d9760e8a8c7c97679ee3')
+            '9bc32100aeb10099c05bd175f422f30f4c415755129e675dfb52212a9f822fcdae40638fe8351eed03816aacf41290837d5a900e81d7d9760e8a8c7c97679ee3'
+            '9e88e6138d384c995f3ad89493ca79008e06aea78a23f938761eda593b56e0055e6c9cdf8fe07298f4eb23aedd8d519fa5d635477c8ecc2ec0a245b16c68ea18')
 __version="${pkgver}-${pkgrel}"
 
 # -fno-plt causes linker errors (undefined reference to internal methods)
