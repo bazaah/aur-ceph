@@ -170,6 +170,9 @@ source=(
 
   # Backport of https://github.com/ceph/ceph/pull/62951, fixed up for v19
   'ceph-20.2.0-backport-pybind-avoid-pyo3-errors-by-child-process.patch'
+
+  # Exclude python lint / fmt / tool checking from project test suite
+  'ceph-20.2.0-restrict-tox-tests.patch'
 )
 sha512sums=('278101d2df7bed5363b20c2b065d7a7b26252c8164511257e213ffaa58d509015558183de10bc9281bcbe4d9f85244bcac5bba4db9823e28df6a96d0b687d00a'
             '4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049'
@@ -204,7 +207,8 @@ sha512sums=('278101d2df7bed5363b20c2b065d7a7b26252c8164511257e213ffaa58d50901555
             '4aa5dbc9b4e7adda5a7248c9c2440ba028c15e48a09460d041bbf8e45dfd689be3978283db98e23f91e5d319779770dddd74e239a6c5ae37e68dee281dba275f'
             '40d1943593955589cc9e857d3c97543f864857f8f0d928b59edb59e44dd371e565f8830e494934c410d339a8521288a397e10abe547f7abe8f3c2539ec56bef2'
             '136d3b89ec893907bdd62196cc0b622f4f7ce7cf0dc54f9564b212da22f1f1e41269a0785c0f77318e23f122f81d46e06f0bffa684952ba2542e82d5a993fb87'
-            'feaf80ff80067e6d3fec07e053055a4bcec98b886d81a171fa09ab72c6f4bf6b79c3462dc967d79674d2c3cb5393665ba37d5de0a537195f78e3bb39c9aca3b8')
+            'feaf80ff80067e6d3fec07e053055a4bcec98b886d81a171fa09ab72c6f4bf6b79c3462dc967d79674d2c3cb5393665ba37d5de0a537195f78e3bb39c9aca3b8'
+            '9bc32100aeb10099c05bd175f422f30f4c415755129e675dfb52212a9f822fcdae40638fe8351eed03816aacf41290837d5a900e81d7d9760e8a8c7c97679ee3')
 __version="${pkgver}-${pkgrel}"
 
 # -fno-plt causes linker errors (undefined reference to internal methods)
