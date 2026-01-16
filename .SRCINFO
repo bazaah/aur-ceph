@@ -103,6 +103,7 @@ pkgbase = ceph
 	source = ceph-20.2.0-backport-pybind-avoid-pyo3-errors-by-child-process.patch
 	source = ceph-20.2.0-restrict-tox-tests.patch
 	source = ceph-20.2.0-backport-ec-corruption-fix.patch
+	source = ceph-20.2.0-backport-buffer-overread-in-datagenerator.patch
 	sha512sums = 278101d2df7bed5363b20c2b065d7a7b26252c8164511257e213ffaa58d509015558183de10bc9281bcbe4d9f85244bcac5bba4db9823e28df6a96d0b687d00a
 	sha512sums = 4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049
 	sha512sums = 41dbc1c395cdf9b3edf5c5d91bbc90f416b4338ad964fa3471f26a4312d3ec2a5dcebbc351a1640dc4b047b4f71aa134ac7486747e5f62980092b0176e7567f5
@@ -120,6 +121,7 @@ pkgbase = ceph
 	sha512sums = feaf80ff80067e6d3fec07e053055a4bcec98b886d81a171fa09ab72c6f4bf6b79c3462dc967d79674d2c3cb5393665ba37d5de0a537195f78e3bb39c9aca3b8
 	sha512sums = 9bc32100aeb10099c05bd175f422f30f4c415755129e675dfb52212a9f822fcdae40638fe8351eed03816aacf41290837d5a900e81d7d9760e8a8c7c97679ee3
 	sha512sums = 9e88e6138d384c995f3ad89493ca79008e06aea78a23f938761eda593b56e0055e6c9cdf8fe07298f4eb23aedd8d519fa5d635477c8ecc2ec0a245b16c68ea18
+	sha512sums = e07f77097b1ba49cdcbad432225f3b11b8df5dad003624f13bd5c7f33c48c30354486a4b294733d2abc26790f74feb01e334a8ce02adaed435287fe52ac4b91c
 
 pkgname = ceph-common
 	pkgdesc = Ceph Storage common libraries and dependencies
