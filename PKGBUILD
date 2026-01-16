@@ -87,15 +87,6 @@ source=(
   # Bundled rocksdb and gcc >=15.1 don't agree on imports, so appease gcc
   'ceph-19.2.2-rocksdb-cstdint.patch'
 
-  # boost::process =1.88 removed the previous compatibility layer between v1 and v2 of
-  # the library, so we have to do it the hard way
-  # https://github.com/boostorg/process/issues/480
-  'ceph-19.2.2-rgw-lua-boost-process-v1.patch'
-
-  # Fixes for boost 1.89, unfortunately, this is only a partial fix for the
-  # boost_system linkage
-  'ceph-19.2.3-boost-189-fixes.patch'
-
   # Backport of https://github.com/ceph/ceph/pull/62951, fixed up for v19
   'ceph-20.2.0-backport-pybind-avoid-pyo3-errors-by-child-process.patch'
 
@@ -109,6 +100,9 @@ source=(
 
   # Quiet a bit of line noise in builds
   'ceph-20.2.0-backport-buffer-overread-in-datagenerator.patch'
+
+  # Backport of three related fixes for boost 1.89 & 1.90
+  'ceph-20.2.0-backport-boost-190-fixes.patch'
 )
 sha512sums=('278101d2df7bed5363b20c2b065d7a7b26252c8164511257e213ffaa58d509015558183de10bc9281bcbe4d9f85244bcac5bba4db9823e28df6a96d0b687d00a'
             '4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049'
@@ -122,12 +116,11 @@ sha512sums=('278101d2df7bed5363b20c2b065d7a7b26252c8164511257e213ffaa58d50901555
             '03aa3e095240f485b2cdad57a53cd2fc52b196ce15d1c7ed230728315df27306b8bdd08e92f1875dfa4637789273f5f8cf36948f3492a849f824549e219f690c'
             '76324e5a592994bc4712481ad7e21d91dbc1b6774b3f8579e8cb869cd2c6939eab3f646d99f4cd8865052ac4dc5cb90146caa7f8cef4b3dc46b6b2d71fde61bc'
             '286db9845a005fac92fafd749959419ec7ceca78e50880c31415f3e0477e18d732c763964e743e0e954c0e7b08c25c16793e5caf83d44cfa16033c40f76106b4'
-            'e5e2e30da3618407b753af75d5cbfd2898d33e62871c4c7c92d775e63ffbbe23a6b09894ac1a6e30996218388ebfe5f50d903910eafad20648511c92e6f2133d'
-            '4aa5dbc9b4e7adda5a7248c9c2440ba028c15e48a09460d041bbf8e45dfd689be3978283db98e23f91e5d319779770dddd74e239a6c5ae37e68dee281dba275f'
             'feaf80ff80067e6d3fec07e053055a4bcec98b886d81a171fa09ab72c6f4bf6b79c3462dc967d79674d2c3cb5393665ba37d5de0a537195f78e3bb39c9aca3b8'
             '9bc32100aeb10099c05bd175f422f30f4c415755129e675dfb52212a9f822fcdae40638fe8351eed03816aacf41290837d5a900e81d7d9760e8a8c7c97679ee3'
             '9e88e6138d384c995f3ad89493ca79008e06aea78a23f938761eda593b56e0055e6c9cdf8fe07298f4eb23aedd8d519fa5d635477c8ecc2ec0a245b16c68ea18'
-            'e07f77097b1ba49cdcbad432225f3b11b8df5dad003624f13bd5c7f33c48c30354486a4b294733d2abc26790f74feb01e334a8ce02adaed435287fe52ac4b91c')
+            'e07f77097b1ba49cdcbad432225f3b11b8df5dad003624f13bd5c7f33c48c30354486a4b294733d2abc26790f74feb01e334a8ce02adaed435287fe52ac4b91c'
+            'e94b6379bf9d601423ca9fe73b51d0de88638381506f1ab56778f7eee9caf2b7fa66d28e02bd92cc1d9a48785cc6714a3813350f26607aff1c924af0caaafb8e')
 __version="${pkgver}-${pkgrel}"
 
 # -fno-plt causes linker errors (undefined reference to internal methods)
@@ -241,10 +234,6 @@ build() {
     -DENABLE_SHARED=ON \
     -DWITH_TESTS=ON \
     -Wno-dev
-
-  # Ugly, ugly hack until I can figure out what is adding Boost::system to
-  # target_link_libraries
-  sed -i -e 's|-lboost_system ||g' build/build.ninja
 
   cmake --build build -t all tests
 }
