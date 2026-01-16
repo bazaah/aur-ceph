@@ -178,7 +178,7 @@ prepare() {
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
-  export CFLAGS CXXFLAGS
+  export CFLAGS+=' -Wno-maybe-uninitialized' CXXFLAGS+=' -Wno-maybe-uninitialized'
   export CMAKE_BUILD_TYPE='RelWithDebInfo'
   export CMAKE_BUILD_PARALLEL_LEVEL=$(nproc --ignore=1 || echo "4")
 
