@@ -257,6 +257,17 @@ prepare() {
   #
   # Note: this must be removed from the installed files!
   install -vD src/pybind/mgr/tests/__init__.py src/pybind/ceph_module/__init__.py
+
+  # Monkey patch liburing's includes to forward declare `struct open_how`
+  #
+  # Something in a recent kernel-headers changed so that this is no longer
+  # transitively included.
+  #
+  # See: https://aur.archlinux.org/pkgbase/ceph#comment-1062706
+  # Reported-by: https://aur.archlinux.org/account/daurnimator
+  #
+  # TODO: Remove this patch before v20 (uses a much later liburing version)
+  sed -i '328a\#include <linux/openat2.h>\n' src/liburing/configure
 }
 
 build() {
