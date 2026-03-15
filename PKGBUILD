@@ -5,7 +5,7 @@
 pkgbase='ceph'
 pkgdesc='Distributed, fault-tolerant storage platform delivering object, block, and file system'
 pkgver=19.2.3
-pkgrel=5
+pkgrel=6
 url='https://ceph.com/'
 arch=('x86_64')
 license=('GPL-2.0-or-later' 'LGPL-2.1-or-later' 'LGPL-3.0-or-later')
@@ -257,6 +257,17 @@ prepare() {
   #
   # Note: this must be removed from the installed files!
   install -vD src/pybind/mgr/tests/__init__.py src/pybind/ceph_module/__init__.py
+
+  # Monkey patch liburing's includes to forward declare `struct open_how`
+  #
+  # Something in a recent kernel-headers changed so that this is no longer
+  # transitively included.
+  #
+  # See: https://aur.archlinux.org/pkgbase/ceph#comment-1062706
+  # Reported-by: https://aur.archlinux.org/account/daurnimator
+  #
+  # TODO: Remove this patch before v20 (uses a much later liburing version)
+  sed -i '328a\#include <linux/openat2.h>\n' src/liburing/configure
 }
 
 build() {
