@@ -28,7 +28,7 @@ makedepends=(
   'gperf'          'gperftools'      'jq'           'junit'           'keyutils'
   'libaio'         'libatomic_ops'   'libcap'       'libcap-ng'       'libcurl-compat'
   'libedit'        'libgudev'        'libnl'        'librabbitmq-c'   'librdkafka'
-  'libnbd'         'libutil-linux'   'libuv'        'libxcrypt'       'lua'
+  'libnbd'         'libutil-linux'   'libuv'        'libxcrypt'       'lua53'
   'lz4'            'nasm'            'ninja'        'nss'             'oath-toolkit'
   'openssl'        'pkgconf'         'python'       'snappy'          'sqlite'
   'systemd-libs'   'thrift'          'util-linux'   'xfsprogs'        'zlib'
@@ -632,7 +632,7 @@ package_librados() {
   depends=(
     "ceph-common=${__version}"
 
-    'bash'   'boost-libs'   'fmt'   'lua'   'oath-toolkit'
+    'bash'   'boost-libs'   'fmt'   'lua53'   'oath-toolkit'
   )
   provides=(
     'libradosstriper.so'   'librados.so'
@@ -788,7 +788,7 @@ package_ceph-mds() {
   depends=(
     "ceph-base=${__version}"
 
-    'lua'   'fmt'   'gperftools'
+    'lua53'   'fmt'   'gperftools'
   )
 
   mv __pkg__/$pkgname/* "$pkgdir"
@@ -807,7 +807,7 @@ package_ceph-rgw() {
     "librgw=${__version}"
 
     'gawk'            'oath-toolkit'   'boost-libs'   'expat'   'gperftools'
-    'librabbitmq-c'   'librdkafka'     'lua'
+    'librabbitmq-c'   'librdkafka'     'lua53'
   )
 
   # Prepare state dirs
@@ -879,7 +879,7 @@ package_ceph-cephfs() {
   depends=(
     "libcephfs=${__version}"
 
-    'fuse3'   'fmt'   'gperftools'   'libcap-ng'   'lua'   'python'
+    'fuse3'   'fmt'   'gperftools'   'libcap-ng'   'lua53'   'python'
   )
   optdepends=(
     "cephfs-shell: Shell access to a CephFS filesystem"
@@ -895,7 +895,7 @@ package_librgw() {
   depends=(
     "librados=${__version}"
 
-    'librabbitmq-c'   'lua'   'librdkafka'   'expat'   'boost-libs'   'gperftools'
+    'librabbitmq-c'   'lua53'   'librdkafka'   'expat'   'boost-libs'   'gperftools'
   )
   provides=(
     'librgw.so'
