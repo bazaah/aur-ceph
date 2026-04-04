@@ -102,6 +102,7 @@ pkgbase = ceph
 	source = ceph-20.2.0-restrict-tox-tests.patch
 	source = ceph-20.2.0-quiet-btree-array-bounds.patch
 	source = ceph-20.2.0-backport-buffer-overread-in-datagenerator.patch
+	source = ceph-20.2.0-backport-rgw-lc-do-not-delete-dm.patch
 	sha512sums = 278101d2df7bed5363b20c2b065d7a7b26252c8164511257e213ffaa58d509015558183de10bc9281bcbe4d9f85244bcac5bba4db9823e28df6a96d0b687d00a
 	sha512sums = 4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049
 	sha512sums = 41dbc1c395cdf9b3edf5c5d91bbc90f416b4338ad964fa3471f26a4312d3ec2a5dcebbc351a1640dc4b047b4f71aa134ac7486747e5f62980092b0176e7567f5
@@ -118,6 +119,7 @@ pkgbase = ceph
 	sha512sums = 9bc32100aeb10099c05bd175f422f30f4c415755129e675dfb52212a9f822fcdae40638fe8351eed03816aacf41290837d5a900e81d7d9760e8a8c7c97679ee3
 	sha512sums = 24ed165a1ea73a6ed7cf840a0d0ef8082e93ff9822ea9c3c4256d7de67deb485c7ca77f9f42f64e857a6f84fc137a73cf2458b08a50dd73caa4a42c7cf4a8f6f
 	sha512sums = e07f77097b1ba49cdcbad432225f3b11b8df5dad003624f13bd5c7f33c48c30354486a4b294733d2abc26790f74feb01e334a8ce02adaed435287fe52ac4b91c
+	sha512sums = 65334e1d6a94b15d28c30a2cf1eb86d40f96f4305308c451ff9b446a59fa98653400c9d5c047535375b5fc96d53dc70877eb20f8378b57516cd7292bec28c6f8
 
 pkgname = ceph-common
 	pkgdesc = Ceph Storage common libraries and dependencies
