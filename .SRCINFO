@@ -102,6 +102,7 @@ pkgbase = ceph
 	source = ceph-20.2.0-backport-buffer-overread-in-datagenerator.patch
 	source = ceph-20.2.0-backport-rgw-lc-do-not-delete-dm.patch
 	source = ceph-20.2.0-backport-boost-190-fixes.patch
+	source = ceph-20.2.0-mgr-module-optional-notify-types.patch
 	sha512sums = 278101d2df7bed5363b20c2b065d7a7b26252c8164511257e213ffaa58d509015558183de10bc9281bcbe4d9f85244bcac5bba4db9823e28df6a96d0b687d00a
 	sha512sums = 4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049
 	sha512sums = 41dbc1c395cdf9b3edf5c5d91bbc90f416b4338ad964fa3471f26a4312d3ec2a5dcebbc351a1640dc4b047b4f71aa134ac7486747e5f62980092b0176e7567f5
@@ -118,6 +119,7 @@ pkgbase = ceph
 	sha512sums = e07f77097b1ba49cdcbad432225f3b11b8df5dad003624f13bd5c7f33c48c30354486a4b294733d2abc26790f74feb01e334a8ce02adaed435287fe52ac4b91c
 	sha512sums = 65334e1d6a94b15d28c30a2cf1eb86d40f96f4305308c451ff9b446a59fa98653400c9d5c047535375b5fc96d53dc70877eb20f8378b57516cd7292bec28c6f8
 	sha512sums = 09c8d37ad34a2a715867ebddab71e9cef8a488114f6f16fe2892d7c45609252ead8a29a8f055ff3a8253a7c96502482a1bed407922dd142ec072af55d3bcecbc
+	sha512sums = 690ddbebbbce9e0b52c9c401e668226cb0f9cea843d85ff5e5095e990df6a2905189dd9baaf21f71efc8153319a2cec16ded335bfdf40d34dbb2e33925c240ef
 
 pkgname = ceph-common
 	pkgdesc = Ceph Storage common libraries and dependencies
