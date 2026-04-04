@@ -740,10 +740,10 @@ package_ceph-mgr() {
 
     'sqlite'   'python'   'boost-libs'   'fmt'   'gperftools'
 
-    'python-bcrypt'     'python-cheroot'    'python-cherrypy'   'python-coverage'    'python-dateutil'
-    'python-jinja'      'python-jsonpatch'  'python-packaging'  'python-pecan'       'python-prettytable'
-    'python-pyopenssl'  'python-requests'   'python-scipy'      'python-setuptools'  'python-typing_extensions'
-    'python-urllib3'    'python-werkzeug'   'python-yaml'
+    'python-bcrypt'              'python-cheroot'     'python-cherrypy'    'python-coverage'    'python-dateutil'
+    'python-jinja'               'python-jmespath'    'python-jsonpatch'   'python-packaging'   'python-pecan'
+    'python-prettytable'         'python-pyopenssl'   'python-requests'    'python-scipy'       'python-setuptools'
+    'python-typing_extensions'   'python-urllib3'     'python-werkzeug'    'python-xmltodict'   'python-yaml'
   )
   optdepends=(
     'cephadm: Required if cluster is managed via cephadm'
