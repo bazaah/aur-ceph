@@ -1,0 +1,109 @@
+Boost 1.91 changed Boost.Container's flat_set such that
+`insert(InputIterator, InputIterator)` is now ambiguous with
+`insert(const_iterator, K&&)` when the comparator declares
+`is_transparent`. The transparent-K overload now also accepts iterator
+types as K, so the compiler cannot pick between the single-element
+hint-insert and the range-insert.
+
+Workaround: loop over the source range and call the single-arg
+`insert(value)` overload, which is unambiguous.
+
+This patch covers every range-insert in the tree against
+`rgw::zone_features::set` (the only transparent flat_set comparator,
+verified via GitHub code search of ceph/ceph for `is_transparent
+flat_set`). Some of these sites compile fine with iterator types other
+than `flat_set::const_iterator`, but rewriting them all keeps the
+behavior consistent and prevents future churn.
+
+No upstream Ceph fix exists yet; ceph/main has the same code.
+
+diff --git a/src/rgw/driver/json_config/store.cc b/src/rgw/driver/json_config/store.cc
+--- a/src/rgw/driver/json_config/store.cc
++++ b/src/rgw/driver/json_config/store.cc
+@@ -149,8 +149,9 @@
+       throw std::system_error(-r, std::system_category());
+     }
+ 
+-    config.zonegroup.enabled_features.insert(rgw::zone_features::enabled.begin(),
+-                                             rgw::zone_features::enabled.end());
++    for (const auto& feature : rgw::zone_features::enabled) {
++      config.zonegroup.enabled_features.insert(std::string{feature});
++    }
+   }
+ 
+   // insert the default placement target if it doesn't exist
+diff --git a/src/rgw/driver/rados/rgw_zone.cc b/src/rgw/driver/rados/rgw_zone.cc
+--- a/src/rgw/driver/rados/rgw_zone.cc
++++ b/src/rgw/driver/rados/rgw_zone.cc
+@@ -82,11 +82,13 @@
+   master_zone = default_zone.id;
+ 
+   // initialize supported zone features
+-  default_zone.supported_features.insert(rgw::zone_features::supported.begin(),
+-                                         rgw::zone_features::supported.end());
++  for (const auto& feature : rgw::zone_features::supported) {
++    default_zone.supported_features.insert(std::string{feature});
++  }
+   // enable default zonegroup features
+-  enabled_features.insert(rgw::zone_features::enabled.begin(),
+-                          rgw::zone_features::enabled.end());
++  for (const auto& feature : rgw::zone_features::enabled) {
++    enabled_features.insert(std::string{feature});
++  }
+   
+   r = create(dpp, y);
+   if (r < 0 && r != -EEXIST) {
+@@ -195,8 +197,9 @@
+     zone.sync_from.erase(rm);
+   }
+ 
+-  zone.supported_features.insert(enable_features.begin(),
+-                                 enable_features.end());
++  for (const auto& feature : enable_features) {
++    zone.supported_features.insert(feature);
++  }
+ 
+   for (const auto& feature : disable_features) {
+     if (enabled_features.contains(feature)) {
+@@ -873,8 +876,9 @@
+   info.is_master = true;
+ 
+   // enable all supported features
+-  info.enabled_features.insert(rgw::zone_features::enabled.begin(),
+-                               rgw::zone_features::enabled.end());
++  for (const auto& feature : rgw::zone_features::enabled) {
++    info.enabled_features.insert(std::string{feature});
++  }
+ 
+   // add the zone to the zonegroup
+   bool is_master = true;
+diff --git a/src/rgw/radosgw-admin/radosgw-admin.cc b/src/rgw/radosgw-admin/radosgw-admin.cc
+--- a/src/rgw/radosgw-admin/radosgw-admin.cc
++++ b/src/rgw/radosgw-admin/radosgw-admin.cc
+@@ -5553,8 +5553,9 @@
+ 
+         zonegroup.enabled_features = enable_features;
+         if (zonegroup.enabled_features.empty()) { // enable features by default
+-          zonegroup.enabled_features.insert(rgw::zone_features::enabled.begin(),
+-                                            rgw::zone_features::enabled.end());
++          for (const auto& feature : rgw::zone_features::enabled) {
++            zonegroup.enabled_features.insert(std::string{feature});
++          }
+         }
+         for (const auto& feature : disable_features) {
+           auto i = zonegroup.enabled_features.find(feature);
+diff --git a/src/rgw/rgw_zone.cc b/src/rgw/rgw_zone.cc
+--- a/src/rgw/rgw_zone.cc
++++ b/src/rgw/rgw_zone.cc
+@@ -1423,8 +1423,9 @@
+   }
+ 
+   // add/remove supported features
+-  zone.supported_features.insert(enable_features.begin(),
+-                                 enable_features.end());
++  for (const auto& feature : enable_features) {
++    zone.supported_features.insert(feature);
++  }
+ 
+   for (const auto& feature : disable_features) {
+     if (zonegroup.enabled_features.contains(feature)) {
