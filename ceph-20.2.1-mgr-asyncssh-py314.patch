@@ -1,0 +1,28 @@
+Ceph 20.2.1's mgr requirements pin `asyncssh==2.9` (frozen since
+2022-01-25, ceph/ceph dd09127ec4979ee27708d1aab44cc13a7bb3b2e6). On
+Python 3.14, that version of asyncssh's `_RecordMeta` metaclass
+(asyncssh/misc.py) fails to construct `SSHCompletedProcess` instances:
+
+  AttributeError: 'SSHCompletedProcess' object has no attribute
+                  'returncode' and no __dict__ for setting new attributes
+
+The cause is asyncssh 2.9 setting `__slots__` to a `dict` of field
+defaults, which Python 3.14 no longer accepts as a slot specification.
+asyncssh 2.20.0 (2025-02-17) fixes this; see the upstream changelog
+entry "Fixed a couple of issues with Python 3.14".
+
+This breaks `cephadm/tests/test_ssh.py` under run-tox-mgr. The bump is
+otherwise behavior-preserving (no API changes between 2.9 and 2.20+
+that cephadm uses).
+
+No upstream Ceph fix exists yet; ceph/main has the same pin.
+
+diff --git a/src/pybind/mgr/requirements.txt b/src/pybind/mgr/requirements.txt
+--- a/src/pybind/mgr/requirements.txt
++++ b/src/pybind/mgr/requirements.txt
+@@ -1,4 +1,4 @@
+ -rrequirements-required.txt
+-asyncssh==2.9
++asyncssh>=2.20
+ kubernetes
+ urllib3==1.26.15

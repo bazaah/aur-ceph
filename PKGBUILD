@@ -110,6 +110,11 @@ source=(
   # upstream Ceph fix yet (ceph/main has the same code); local workaround
   # uses a per-element loop instead of the range insert.
   'ceph-20.2.1-boost-191-flat-set-insert.patch'
+
+  # Bump pinned asyncssh from 2.9 (Jan 2022) to >=2.20 so cephadm tests
+  # work on Python 3.14. asyncssh 2.20.0 (Feb 2025) explicitly fixed
+  # Python 3.14 incompatibilities. No upstream Ceph fix yet.
+  'ceph-20.2.1-mgr-asyncssh-py314.patch'
 )
 sha512sums=('bd178ddd5efa532c90bc7633892452d49570da71cc9cb8a448048a51f4e1487a59dba05bea78cc2e6c9c75d112ed6a4f5613f5ce7f30b107682c2be620f5e1a5'
             '4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049'
@@ -128,7 +133,8 @@ sha512sums=('bd178ddd5efa532c90bc7633892452d49570da71cc9cb8a448048a51f4e1487a59d
             '09c8d37ad34a2a715867ebddab71e9cef8a488114f6f16fe2892d7c45609252ead8a29a8f055ff3a8253a7c96502482a1bed407922dd142ec072af55d3bcecbc'
             '690ddbebbbce9e0b52c9c401e668226cb0f9cea843d85ff5e5095e990df6a2905189dd9baaf21f71efc8153319a2cec16ded335bfdf40d34dbb2e33925c240ef'
             '14212332af61a6d055acedc8f12be6f769b49568309d5b357c40b4263d087e83b3f71f2632385c5020d487f0420f978e53fe3c3dc7c3dead75216119412fd03d'
-            '3262a95a2a3e342d68bf01df9fa3eebfd9bb9b0d7b0780ef7f9d67d89930bc2e7494be7e5b3a50a7de7fe4f4d8e2a6d6e2cb67f133c0a53036f3cf6cd2965d82')
+            '3262a95a2a3e342d68bf01df9fa3eebfd9bb9b0d7b0780ef7f9d67d89930bc2e7494be7e5b3a50a7de7fe4f4d8e2a6d6e2cb67f133c0a53036f3cf6cd2965d82'
+            '9ffe5758a13305f355cf3f34831577f934484aa44453f143b1e52d5a70c9f74c11588a987e7b941df5b78d979e63a12a21cad8b63b18f17735235f6fb3a1f208')
 __version="${pkgver}-${pkgrel}"
 
 # -fno-plt causes linker errors (undefined reference to internal methods)
