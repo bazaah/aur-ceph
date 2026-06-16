@@ -185,11 +185,8 @@ prepare() {
   #
   # Note: this must be removed from the installed files!
   install -vD src/pybind/mgr/tests/__init__.py src/pybind/ceph_module/__init__.py
-}
 
-build() {
-  cd "${srcdir}/${pkgbase}-${pkgver}"
-
+  # === CMake ===
   export CFLAGS+=' -Wno-maybe-uninitialized' CXXFLAGS+=' -Wno-maybe-uninitialized'
   export CMAKE_BUILD_TYPE='RelWithDebInfo'
   export CMAKE_BUILD_PARALLEL_LEVEL=$(nproc --ignore=1 || echo "4")
@@ -247,6 +244,10 @@ build() {
     -DENABLE_SHARED=ON \
     -DWITH_TESTS=ON \
     -Wno-dev
+}
+
+build() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
 
   cmake --build build -t all tests
 }
