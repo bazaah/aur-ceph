@@ -92,9 +92,6 @@ source=(
   # Quiet a bit of line noise in builds
   'ceph-20.2.0-backport-buffer-overread-in-datagenerator.patch'
 
-  # Backport of https://github.com/ceph/ceph/pull/67573
-  'ceph-20.2.0-backport-rgw-lc-do-not-delete-dm.patch'
-
   # Backport of three related fixes for boost 1.89 & 1.90
   'ceph-20.2.0-backport-boost-190-fixes.patch'
 
@@ -124,7 +121,6 @@ sha512sums=('bd178ddd5efa532c90bc7633892452d49570da71cc9cb8a448048a51f4e1487a59d
             '9bc32100aeb10099c05bd175f422f30f4c415755129e675dfb52212a9f822fcdae40638fe8351eed03816aacf41290837d5a900e81d7d9760e8a8c7c97679ee3'
             '24ed165a1ea73a6ed7cf840a0d0ef8082e93ff9822ea9c3c4256d7de67deb485c7ca77f9f42f64e857a6f84fc137a73cf2458b08a50dd73caa4a42c7cf4a8f6f'
             'e07f77097b1ba49cdcbad432225f3b11b8df5dad003624f13bd5c7f33c48c30354486a4b294733d2abc26790f74feb01e334a8ce02adaed435287fe52ac4b91c'
-            '65334e1d6a94b15d28c30a2cf1eb86d40f96f4305308c451ff9b446a59fa98653400c9d5c047535375b5fc96d53dc70877eb20f8378b57516cd7292bec28c6f8'
             '09c8d37ad34a2a715867ebddab71e9cef8a488114f6f16fe2892d7c45609252ead8a29a8f055ff3a8253a7c96502482a1bed407922dd142ec072af55d3bcecbc'
             '690ddbebbbce9e0b52c9c401e668226cb0f9cea843d85ff5e5095e990df6a2905189dd9baaf21f71efc8153319a2cec16ded335bfdf40d34dbb2e33925c240ef'
             '14212332af61a6d055acedc8f12be6f769b49568309d5b357c40b4263d087e83b3f71f2632385c5020d487f0420f978e53fe3c3dc7c3dead75216119412fd03d'
