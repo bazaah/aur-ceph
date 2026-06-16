@@ -107,6 +107,9 @@ source=(
 
   # gcc 16 also broke some things, so get those fixed up too
   'ceph-20.2.1-backport-gcc16-fixes.patch'
+
+  # Always select lua 5.3 even if other versions exist
+  'ceph-20.2.2-lua-5-3-exact.patch'
 )
 sha512sums=('bd178ddd5efa532c90bc7633892452d49570da71cc9cb8a448048a51f4e1487a59dba05bea78cc2e6c9c75d112ed6a4f5613f5ce7f30b107682c2be620f5e1a5'
             '4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049'
@@ -125,7 +128,8 @@ sha512sums=('bd178ddd5efa532c90bc7633892452d49570da71cc9cb8a448048a51f4e1487a59d
             '690ddbebbbce9e0b52c9c401e668226cb0f9cea843d85ff5e5095e990df6a2905189dd9baaf21f71efc8153319a2cec16ded335bfdf40d34dbb2e33925c240ef'
             '14212332af61a6d055acedc8f12be6f769b49568309d5b357c40b4263d087e83b3f71f2632385c5020d487f0420f978e53fe3c3dc7c3dead75216119412fd03d'
             '46866375f573505c04652b5679cecb138d8d53d772ace54e45a1e557bf0fe009e03d657b44cdbc33d8f96746760ae1c969ce2e30d0ea4a7933aa3ff28b9e2b4e'
-            'be44fae301ce3dc2cba90d3ef33849d3e4d5c0878948c2b389200e0cde9eb2e118d8b694f3b6343f86686d4c60988dd43ebc3408317cd0cfcdadbf0ed1ac38d2')
+            'be44fae301ce3dc2cba90d3ef33849d3e4d5c0878948c2b389200e0cde9eb2e118d8b694f3b6343f86686d4c60988dd43ebc3408317cd0cfcdadbf0ed1ac38d2'
+            'ce1c5ccfdc595ce87ecf164a99d4205f7e303f527a9e3528c8a2e54ef387cff34eb03cbd9b25e6ba09fbc7efed23536d1612f57d0f9671a62e1e9dce05fdec35')
 __version="${pkgver}-${pkgrel}"
 
 # -fno-plt causes linker errors (undefined reference to internal methods)
