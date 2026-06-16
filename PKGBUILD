@@ -42,8 +42,7 @@ makedepends=(
 checkdepends=(
   'inetutils'     'xmlstarlet'
 
-  'python-nose'   'python-pycodestyle'   'python-pylint'   'python-pytest'   'python-pytest-cov'
-  'python-saml'   'python-xmlsec'
+  'python-nose'   'python-pycodestyle'   'python-pylint'   'python-saml'   'python-xmlsec'
 )
 
 # Despite the upstream suggesting that LTO is now possible, I still am unable
@@ -165,9 +164,16 @@ prepare() {
   # These are too small (or change too frequently) to be distinct patches, but
   # are annoying and cause spurious test failures
 
+  # Make the ceph test suite use the distro compiled packages so we don't have to
+  # roll the dice on if xmlsec or grpc pip wheel compiles are going to randomly
+  # break test suites depending on the current phase of the moon (:
+  sed -i '/export PIP_FIND_LINKS/a\    export VIRTUALENV_SYSTEM_SITE_PACKAGES=true' \
+    src/script/run_tox.sh
+  sed -i 's|\$PYTHON -m venv \$DIR|\$PYTHON -m venv --system-site-packages \$DIR|' \
+    src/tools/setup-virtualenv.sh
+
   # This test fails the entire suite, and doesn't actually test anything (see the TODO).
-  sed -i 's| hap.create_daemon_dirs("/var/tmp", 45, 54)| #hap.create_daemon_dirs("/var/tmp", 45, 54)|' \
-    src/cephadm/tests/test_ingress.py
+  sed -i '/test_haproxy_create_daemon_dirs/a\    Pass' src/cephadm/tests/test_ingress.py
 
   # pyfakefs <=5.6.0 do not work on python >=3.13
   # Note however, the test suite will still partially fail (wants root) but
