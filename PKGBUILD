@@ -255,6 +255,7 @@ prepare() {
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
+  cmake --build build -t legacy-option-headers
   cmake --build build -t all tests
 }
 
