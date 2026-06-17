@@ -380,6 +380,7 @@ _make_ceph_packages() {
       $lib/ceph/ceph_common.sh \
       $lib/ceph/libceph-common.so.2 \
       $lib/ceph/extblkdev/libceph_ebd_vdo.so \
+      $lib/ceph/extblkdev/libceph_ebd_fcm.so \
       $lib/ceph/denc/* \
       $share/doc/ceph/sample.ceph.conf \
       $man/man8/crushtool.8 \
