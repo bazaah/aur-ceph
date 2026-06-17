@@ -143,6 +143,7 @@ export CXXFLAGS="${CXXFLAGS/-fno-plt/}"
 prepare() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
+  printf '##### PREPARE PATCHES ' ; printf '%0.s#' {1..26} ; printf '\n'
   # apply patches from the source array
   local filename
   for filename in "${source[@]%%::*}"; do
@@ -154,6 +155,7 @@ prepare() {
   done
 
   # === Disable broken tests ===
+  printf '##### PREPARE MONKEY-PATCHING ' ; printf '%0.s#' {1..18} ; printf '\n'
 
   # The ceph tarballs do not include the ceph-erasure-code-corpus submodule so
   # this test fails with: "FAILED no tests found to run"
@@ -193,6 +195,7 @@ prepare() {
   install -vD src/pybind/mgr/tests/__init__.py src/pybind/ceph_module/__init__.py
 
   # === CMake ===
+  printf '##### PREPARE CMAKE ' ; printf '%0.s#' {1..28} ; printf '\n'
   export CFLAGS+=' -Wno-maybe-uninitialized' CXXFLAGS+=' -Wno-maybe-uninitialized'
   export CMAKE_BUILD_TYPE='RelWithDebInfo'
   export CMAKE_BUILD_PARALLEL_LEVEL=$(nproc --ignore=1 || echo "4")
@@ -259,6 +262,7 @@ prepare() {
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
+  printf '##### BUILD PROJECT ' ; printf '%0.s#' {1..28} ; printf '\n'
   cmake --build build -t legacy-option-headers
   cmake --build build -t all tests
 }
@@ -266,6 +270,7 @@ build() {
 check() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
+  printf '##### CHECK PROJECT ' ; printf '%0.s#' {1..28} ; printf '\n'
   (
     cd build
     ctest -j $(nproc --ignore=1 || echo "4") \
