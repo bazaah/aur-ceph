@@ -278,7 +278,8 @@ check() {
       --output-on-failure \
       || true
 
-    # Expected test failures (as of 2025-11-19T12:01:57Z)
+    # Expected test failures (as of 2026-06-29T11:20:15Z)
+    # - run-tox-mgr
     # - run-tox-cephadm
     # - unittest_mds_quiesce_agent
   )
