@@ -109,18 +109,6 @@ source=(
 
   # Always select lua 5.3 even if other versions exist
   'ceph-20.2.2-lua-5-3-exact.patch'
-
-  # Fix memory leak in ceph-mgr
-  # https://github.com/ceph/ceph/pull/70367
-  'ceph-20.2.3-fix-mgr-memory-leak.patch'
-
-  # Fix for the ceph-mgr progress module
-  # https://github.com/ceph/ceph/pull/70225
-  'ceph-20.2.3-fix-mgr-dashboard-progress.patch'
-
-  # Backport make check fixes missed in the 20.2.4 release
-  # https://github.com/ceph/ceph/pull/71191
-  'ceph-20.2.4-backport-test-fixes.patch'
 )
 sha512sums=('59aa027ef3efa67f541518a6a57845de72b4f25a40d959ccf5a91195fa4b728c9b7e9bb269cd01f85e837d5266f36d5aa3438179f275cecc7520ae30dcc8c9f4'
             '4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049'
@@ -140,10 +128,7 @@ sha512sums=('59aa027ef3efa67f541518a6a57845de72b4f25a40d959ccf5a91195fa4b728c9b7
             '14212332af61a6d055acedc8f12be6f769b49568309d5b357c40b4263d087e83b3f71f2632385c5020d487f0420f978e53fe3c3dc7c3dead75216119412fd03d'
             '46866375f573505c04652b5679cecb138d8d53d772ace54e45a1e557bf0fe009e03d657b44cdbc33d8f96746760ae1c969ce2e30d0ea4a7933aa3ff28b9e2b4e'
             'be44fae301ce3dc2cba90d3ef33849d3e4d5c0878948c2b389200e0cde9eb2e118d8b694f3b6343f86686d4c60988dd43ebc3408317cd0cfcdadbf0ed1ac38d2'
-            'ce1c5ccfdc595ce87ecf164a99d4205f7e303f527a9e3528c8a2e54ef387cff34eb03cbd9b25e6ba09fbc7efed23536d1612f57d0f9671a62e1e9dce05fdec35'
-            '017cc958c671c454e002b9d46a424901722728b40113b5eda65926a62684e1e2dfc9371fbc28223efaaee46078ce81fb186f865e63e8bbbf0575f5e459b5e0cc'
-            '587482b4943002290cef31b920cab0e798adbce4c9ac28211f1d67db5799f96254eeae22d38df15d59d97aadac62dcde416f90ca07b0b2a42656bec35ba0c21d'
-            'f6426e51fa35f9f5f034e31459cdab2fefc5ade5e241acdb9086988445d81b4b77ed35f2395b2750d9b7b5ae2564c2e67273841be681834d97ab540338cb7510')
+            'ce1c5ccfdc595ce87ecf164a99d4205f7e303f527a9e3528c8a2e54ef387cff34eb03cbd9b25e6ba09fbc7efed23536d1612f57d0f9671a62e1e9dce05fdec35')
 __version="${pkgver}-${pkgrel}"
 
 # -fno-plt causes linker errors (undefined reference to internal methods)
