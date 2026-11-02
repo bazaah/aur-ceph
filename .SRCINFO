@@ -202,6 +202,10 @@ pkgname = ceph-node-proxy
 	pkgdesc = Ceph Storage daemon for cephadm deployments to collect RedFishAPI hardware metrics
 	depends = python
 
+pkgname = ceph-node-exporter
+	pkgdesc = Ceph Storage daemon for exporting Prometheus compatible metrics from node local services
+	depends = ceph-base=20.2.5-1
+
 pkgname = ceph-rados
 	pkgdesc = Ceph Storage utilities and tools for librados
 	depends = librados=20.2.4-1

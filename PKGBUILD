@@ -10,7 +10,7 @@ url='https://ceph.com/'
 arch=('x86_64')
 license=('GPL-2.0-or-later' 'LGPL-2.1-or-later' 'LGPL-3.0-or-later')
 pkgname=(
-  ceph-{common,compressor,crypto,erasure,tools,test,volume,cephadm,node-proxy}
+  ceph-{common,compressor,crypto,erasure,tools,test,volume,cephadm,node-{proxy,exporter}}
   ceph-{rados,base,mon,mgr,osd,mds,rbd,cephfs,rgw}
   lib{rados,cephfs,rbd,rgw,cephsqlite}
   python-{ceph-common,rados,rbd,cephfs,rgw}
@@ -437,9 +437,7 @@ _make_ceph_packages() {
 
     _package ceph-mgr \
       $bin/ceph-mgr \
-      $bin/ceph-exporter \
       $systemd/ceph-mgr{.target,@.service} \
-      $systemd/ceph-exporter@.service \
       $share/ceph/mgr/*
 
     _package ceph-osd \
@@ -533,6 +531,10 @@ _make_ceph_packages() {
       $bin/ceph-node-proxy \
       $python/ceph_node_proxy \
       $python/ceph_node_proxy-*egg-info*
+
+    _package ceph-node-exporter \
+      $bin/ceph-exporter \
+      $systemd/ceph-exporter@.service
 
     ###############################################
     #         Ceph misc. utils                    #
@@ -989,6 +991,16 @@ package_ceph-node-proxy() {
   pkgdesc='Ceph Storage daemon for cephadm deployments to collect RedFishAPI hardware metrics'
   depends=(
     'python'
+  )
+
+  mv __pkg__/$pkgname/* "$pkgdir"
+  _print
+}
+
+package_ceph-node-exporter() {
+  pkgdesc='Ceph Storage daemon for exporting Prometheus compatible metrics from node local services'
+  depends=(
+    "ceph-base=${__version}"
   )
 
   mv __pkg__/$pkgname/* "$pkgdir"
