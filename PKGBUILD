@@ -4,7 +4,7 @@
 
 pkgbase='ceph'
 pkgdesc='Distributed, fault-tolerant storage platform delivering object, block, and file system'
-pkgver=20.2.4
+pkgver=20.2.5
 pkgrel=1
 url='https://ceph.com/'
 arch=('x86_64')
@@ -110,7 +110,7 @@ source=(
   # Always select lua 5.3 even if other versions exist
   'ceph-20.2.2-lua-5-3-exact.patch'
 )
-sha512sums=('59aa027ef3efa67f541518a6a57845de72b4f25a40d959ccf5a91195fa4b728c9b7e9bb269cd01f85e837d5266f36d5aa3438179f275cecc7520ae30dcc8c9f4'
+sha512sums=('be239996ebb210fda90ee583e6706f24f277b054994be8059b036f242ad76310a6dca7ee44130ee4068ae7b36f2e3dda1aa49711b78af6a25407fc52cda247eb'
             '4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049'
             '41dbc1c395cdf9b3edf5c5d91bbc90f416b4338ad964fa3471f26a4312d3ec2a5dcebbc351a1640dc4b047b4f71aa134ac7486747e5f62980092b0176e7567f5'
             'b12cabda7184721c494edd22250fd05019694d2bc445722d100cdefab5385bd25c2267a029d2f6053932fa6717e38c4314385afd986969ee2744d745b53c8b58'
