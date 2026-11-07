@@ -5000,3 +5000,16 @@ index 1ff3871a576..13822866d41 100644
    if(WITH_RADOSGW_AMQP_ENDPOINT)
      list(APPEND rgw_libs amqp_mock)
    endif()
+diff --git a/src/tools/ceph-dencoder/CMakeLists.txt b/src/tools/ceph-dencoder/CMakeLists.txt
+index 3c8087413cb..6ab94925a59 100644
+--- a/src/tools/ceph-dencoder/CMakeLists.txt
++++ b/src/tools/ceph-dencoder/CMakeLists.txt
+@@ -61,7 +61,7 @@ if(WITH_RADOSGW)
+   target_include_directories(denc-mod-rgw
+     SYSTEM PRIVATE "${CMAKE_SOURCE_DIR}/src/rgw")
+   target_link_libraries(denc-mod-rgw
+-    rgw_a
++    "$<LINK_GROUP:RESCAN,rgw_a,rgw_common>"
+     cls_rgw_client
+     cls_journal_client)
+   if(WITH_RADOSGW_AMQP_ENDPOINT)

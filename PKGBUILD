@@ -4,13 +4,13 @@
 
 pkgbase='ceph'
 pkgdesc='Distributed, fault-tolerant storage platform delivering object, block, and file system'
-pkgver=20.2.4
+pkgver=20.2.5
 pkgrel=1
 url='https://ceph.com/'
 arch=('x86_64')
 license=('GPL-2.0-or-later' 'LGPL-2.1-or-later' 'LGPL-3.0-or-later')
 pkgname=(
-  ceph-{common,compressor,crypto,erasure,tools,test,volume,cephadm,node-proxy}
+  ceph-{common,compressor,crypto,erasure,tools,test,volume,cephadm,node-{proxy,exporter}}
   ceph-{rados,base,mon,mgr,osd,mds,rbd,cephfs,rgw}
   lib{rados,cephfs,rbd,rgw,cephsqlite}
   python-{ceph-common,rados,rbd,cephfs,rgw}
@@ -109,24 +109,12 @@ source=(
 
   # Always select lua 5.3 even if other versions exist
   'ceph-20.2.2-lua-5-3-exact.patch'
-
-  # Fix memory leak in ceph-mgr
-  # https://github.com/ceph/ceph/pull/70367
-  'ceph-20.2.3-fix-mgr-memory-leak.patch'
-
-  # Fix for the ceph-mgr progress module
-  # https://github.com/ceph/ceph/pull/70225
-  'ceph-20.2.3-fix-mgr-dashboard-progress.patch'
-
-  # Backport make check fixes missed in the 20.2.4 release
-  # https://github.com/ceph/ceph/pull/71191
-  'ceph-20.2.4-backport-test-fixes.patch'
 )
-sha512sums=('59aa027ef3efa67f541518a6a57845de72b4f25a40d959ccf5a91195fa4b728c9b7e9bb269cd01f85e837d5266f36d5aa3438179f275cecc7520ae30dcc8c9f4'
+sha512sums=('be239996ebb210fda90ee583e6706f24f277b054994be8059b036f242ad76310a6dca7ee44130ee4068ae7b36f2e3dda1aa49711b78af6a25407fc52cda247eb'
             '4354001c1abd9a0c385ba7bd529e3638fb6660b6a88d4e49706d4ac21c81b8e829303a20fb5445730bdac18c4865efb10bc809c1cd56d743c12aa9a52e160049'
             '41dbc1c395cdf9b3edf5c5d91bbc90f416b4338ad964fa3471f26a4312d3ec2a5dcebbc351a1640dc4b047b4f71aa134ac7486747e5f62980092b0176e7567f5'
             'b12cabda7184721c494edd22250fd05019694d2bc445722d100cdefab5385bd25c2267a029d2f6053932fa6717e38c4314385afd986969ee2744d745b53c8b58'
-            '750f6a153d2e7aa8ca0a9e98e25256cc79515121e2a79ff6b6d274ea2821da116caf0cff6675cb4e4a4f742f31d4392d706dd41e69c04a6e0808c9cfc3f9f5c0'
+            '2132fcc800e8b515b5e7facdb9da45812472750b1bd12dd4442bae8748654802c4303d0f330848e6d83f458051369199ee8a9cdbaa40dceaf27a1b64105bf669'
             '781a01e622a70d56bf1948bdc0b427ffa95a86cec7dd9d26c6007a9ec024a942a8ca55f2acc3d37344862f1d6bf11cae998d8071754cd841a66bfba4ec9c58bf'
             '79be1630ae4a599509e5d789d4aefe412ce47e67ad482f853664fa4b01e063c20593e3da668e6a776ad038fb07606ae948eea41bab20776c33c87f9ab49505e0'
             '0c5124693bd317a73707dfd34b17664cc05233aec08e07739fe08fc9a73be7a1f4446052b1addde832cba141a382c35f45e60c89a00bb7dab81cee7ed6be07e1'
@@ -139,11 +127,8 @@ sha512sums=('59aa027ef3efa67f541518a6a57845de72b4f25a40d959ccf5a91195fa4b728c9b7
             '690ddbebbbce9e0b52c9c401e668226cb0f9cea843d85ff5e5095e990df6a2905189dd9baaf21f71efc8153319a2cec16ded335bfdf40d34dbb2e33925c240ef'
             '14212332af61a6d055acedc8f12be6f769b49568309d5b357c40b4263d087e83b3f71f2632385c5020d487f0420f978e53fe3c3dc7c3dead75216119412fd03d'
             '46866375f573505c04652b5679cecb138d8d53d772ace54e45a1e557bf0fe009e03d657b44cdbc33d8f96746760ae1c969ce2e30d0ea4a7933aa3ff28b9e2b4e'
-            'be44fae301ce3dc2cba90d3ef33849d3e4d5c0878948c2b389200e0cde9eb2e118d8b694f3b6343f86686d4c60988dd43ebc3408317cd0cfcdadbf0ed1ac38d2'
-            'ce1c5ccfdc595ce87ecf164a99d4205f7e303f527a9e3528c8a2e54ef387cff34eb03cbd9b25e6ba09fbc7efed23536d1612f57d0f9671a62e1e9dce05fdec35'
-            '017cc958c671c454e002b9d46a424901722728b40113b5eda65926a62684e1e2dfc9371fbc28223efaaee46078ce81fb186f865e63e8bbbf0575f5e459b5e0cc'
-            '587482b4943002290cef31b920cab0e798adbce4c9ac28211f1d67db5799f96254eeae22d38df15d59d97aadac62dcde416f90ca07b0b2a42656bec35ba0c21d'
-            'f6426e51fa35f9f5f034e31459cdab2fefc5ade5e241acdb9086988445d81b4b77ed35f2395b2750d9b7b5ae2564c2e67273841be681834d97ab540338cb7510')
+            '011f9a756d95d03ac6ddc0b7008071f8aa23a9660855a5583e08da59e025802d06603642d14b8d0606c8823fa208d873d7d1a467b23b413e96432499effc7f74'
+            'ce1c5ccfdc595ce87ecf164a99d4205f7e303f527a9e3528c8a2e54ef387cff34eb03cbd9b25e6ba09fbc7efed23536d1612f57d0f9671a62e1e9dce05fdec35')
 __version="${pkgver}-${pkgrel}"
 
 # -fno-plt causes linker errors (undefined reference to internal methods)
@@ -452,9 +437,7 @@ _make_ceph_packages() {
 
     _package ceph-mgr \
       $bin/ceph-mgr \
-      $bin/ceph-exporter \
       $systemd/ceph-mgr{.target,@.service} \
-      $systemd/ceph-exporter@.service \
       $share/ceph/mgr/*
 
     _package ceph-osd \
@@ -548,6 +531,10 @@ _make_ceph_packages() {
       $bin/ceph-node-proxy \
       $python/ceph_node_proxy \
       $python/ceph_node_proxy-*egg-info*
+
+    _package ceph-node-exporter \
+      $bin/ceph-exporter \
+      $systemd/ceph-exporter@.service
 
     ###############################################
     #         Ceph misc. utils                    #
@@ -1004,6 +991,16 @@ package_ceph-node-proxy() {
   pkgdesc='Ceph Storage daemon for cephadm deployments to collect RedFishAPI hardware metrics'
   depends=(
     'python'
+  )
+
+  mv __pkg__/$pkgname/* "$pkgdir"
+  _print
+}
+
+package_ceph-node-exporter() {
+  pkgdesc='Ceph Storage daemon for exporting Prometheus compatible metrics from node local services'
+  depends=(
+    "ceph-base=${__version}"
   )
 
   mv __pkg__/$pkgname/* "$pkgdir"
